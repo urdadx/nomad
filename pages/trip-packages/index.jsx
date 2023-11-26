@@ -7,12 +7,12 @@ import { locations } from '@/lib/stock-img-locations';
 export const Package = ({ data }) => {
   return (
     <>
-      <div className="w-full mb-4 p-2 h-[117px] flex gap-x-4 rounded-xl border bg-card text-card-foreground shadow-sm">
-        <div className="w-[120px]">
+      <div className="w-full mb-4 p-2 h-[125px] flex gap-x-4 rounded-xl border bg-card text-card-foreground shadow-sm">
+        <div className="w-[120px] h-full">
           <img
             src={data.image}
             alt="image-location"
-            className="object-contain w-full rounded-xl"
+            className="object-cover w-full h-full rounded-xl"
           />
         </div>
         <div className="">
@@ -32,25 +32,12 @@ export const Package = ({ data }) => {
               </span>
               <small>{Math.ceil(Math.random() * (4.0 - 1.9)) + 1.9}</small>
             </div>
-            <div className="pt-1 flex items-center gap-2">
-              <div className="-space-x-3 avatar-group justify-start">
-                {Array.from({
-                  length: 3,
-                }).map((_, index) => (
-                  <div key={index} className="avatar w-[25px] h-[25px]">
-                    <img
-                      alt="people-avatar"
-                      fetchpriority="high"
-                      className="rounded-full"
-                      style={{ color: 'transparent' }}
-                      src="https://avatars.githubusercontent.com/u/70736338?v=4"
-                    />
-                  </div>
-                ))}
+            <div className="pt-1">
+              <div className="p-1 px-2 w-fit h-auto bg-primary rounded-lg">
+                <span className="font-semibold text-white">
+                  ${Math.floor(Math.random() * 999)}
+                </span>
               </div>
-              <small className="text-gray-500">
-                {Math.floor(Math.random() * (5 - 2 + 1) + 2)} People Joined
-              </small>
             </div>
           </div>
         </div>
@@ -62,7 +49,7 @@ export const Package = ({ data }) => {
 const TripPackages = () => {
   return (
     <>
-      <BackNavigator name="Popular Packages" />
+      <BackNavigator name="Popular Packages" showNotification={true} />
       <div className="my-10 px-4">
         <h2 className="text-xl font-semibold text-slate-700">
           All Popular Trip Packages

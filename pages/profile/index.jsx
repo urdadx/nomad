@@ -89,9 +89,9 @@ const Profile = () => {
       <div className="px-4">
         <div className="my-4 p-2 border rounded-2xl w-full h-auto bg-card text-card-foreground shadow-sm">
           <div className="grid grid-rows-5 ">
-            {navigators?.map((item) => {
+            {navigators?.map((item, index) => {
               return (
-                <>
+                <div key={index}>
                   <Link className="" href={item.link}>
                     <div className="flex justify-between mb-2 p-4 cursor-pointer hover:bg-gray-100">
                       <div className="flex gap-2">
@@ -103,7 +103,7 @@ const Profile = () => {
                       </div>
                     </div>
                   </Link>
-                </>
+                </div>
               );
             })}
           </div>

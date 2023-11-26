@@ -51,14 +51,9 @@ const Register = () => {
       <div className="my-14 items-center flex gap-2 w-full justify-center">
         {authIcons.map((item, index) => {
           return (
-            <>
-              <img
-                className="w-10 h-10"
-                src={item}
-                key={index}
-                alt="social-icons"
-              />
-            </>
+            <div key={index}>
+              <img className="w-10 h-10" src={item} alt="social-icons" />
+            </div>
           );
         })}
       </div>

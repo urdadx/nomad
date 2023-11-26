@@ -2,9 +2,7 @@
 import Navbar from '@/components/shared/navbar';
 import { RoughNotation } from 'react-rough-notation';
 import Link from 'next/link';
-import SlidingCarousel, {
-  DestinationCard,
-} from '@/components/utils/sliding-carousel';
+import SlidingCarousel from '@/components/utils/sliding-carousel';
 import BottomNavigator from '@/components/shared/bottom-navigator';
 
 const Home = () => {
@@ -66,8 +64,8 @@ const Home = () => {
           <SlidingCarousel />
         </div>
         <div className="container my-8">
-          <h2 className="hero-title text-center font-semibold text-2xl">
-            AI Assistant
+          <h2 className="text-primary text-center font-semibold text-2xl">
+            Personalized AI Assistant
           </h2>
           <p className="text-center my-2">
             Get a personalized itinerary just for you, guided by traveler tips

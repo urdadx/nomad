@@ -14,7 +14,7 @@ const Navbar = () => {
         </div>
         <Link href="/login" className="">
           <Button
-            className="rounded-2xl px-10 py-6 text-md"
+            className="rounded-2xl px-10 py-6 text-md "
             variant="secondary"
           >
             Sign In!

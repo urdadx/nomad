@@ -18,15 +18,15 @@ const BackNavigator = ({
       <div
         className={` ${
           isTransparent
-            ? 'absolute bg-transparent flex justify-between items-center'
+            ? 'absolute bg-transparent flex justify-between items-center '
             : 'sticky bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl'
-        } top-0 z-50 pt-6 w-full flex items-center h-16 px-4 shrink-0 `}
+        } top-0 z-50 pt-6 w-full flex justify-between items-center h-16 px-4 shrink-0 `}
       >
         <div
           onClick={back}
           className={`${
             isTransparent
-              ? 'bg-transparent cursor-pointer'
+              ? 'bg-transparent cursor-pointer bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl p-2 w-fit h-auto rounded-full'
               : 'cursor-pointer w-fit h-auto p-3 flex start bg-gray-100 rounded-full'
           }`}
         >
@@ -73,7 +73,7 @@ const BackNavigator = ({
             onClick={back}
             className={`${
               isTransparent
-                ? 'bg-transparent'
+                ? 'bg-transparent bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl p-2 w-fit h-auto rounded-full'
                 : 'cursor-pointer w-fit h-auto p-3 flex start bg-gray-100 rounded-full'
             }`}
           >

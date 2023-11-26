@@ -1,11 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import BackNavigator from '@/components/utils/back-navigator';
 import StarSVG from '@/components/utils/star-svg';
-import { MapPin, Heart } from 'lucide-react';
-import { Wifi, Utensils, Bath, Waves } from 'lucide-react';
+import { Wifi, Utensils, Bath, Waves, MapPin, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 
-/* eslint-disable @next/next/no-img-element */
 const LocationDetail = () => {
   return (
     <>
@@ -19,7 +18,7 @@ const LocationDetail = () => {
           />
         </div>
       </div>
-      <div className="w-screen h-screen">
+      <div className="w-screen h-full mb-6">
         <div className="px-4 my-6 flex items-center justify-between">
           <div className="flex flex-col">
             <h2 className="font-semibold text-lg">Black Star Square</h2>
@@ -31,16 +30,16 @@ const LocationDetail = () => {
         </div>
         <div className="px-6 grid grid-cols-3 gap-8">
           <div className="flex items-center gap-1">
-            <small className="text-gray-500">Accra</small>
-            <MapPin color="grey" size={14} />
+            <small className="text-lg text-gray-500">Accra</small>
+            <MapPin color="grey" size={17} />
           </div>
           <div className="flex items-center gap-1">
             <StarSVG />
-            <small className="text-gray-500">4.9(280)</small>
+            <small className="text-lg text-gray-500">4.9(280)</small>
           </div>
           <div className="flex items-center">
-            <small className="text-primary">$80/</small>
-            <small>Person</small>
+            <small className="text-lg font-semibold text-primary">$80/</small>
+            <small className="text-md">Person</small>
           </div>
         </div>
         <div className="container my-8 grid grid-cols-4 gap-2">
@@ -69,8 +68,7 @@ const LocationDetail = () => {
           <h2 className="font-semibold text-xl">About Destination</h2>
           <p className="text-gray-500 text-justify">
             <ReactReadMoreReadLess
-              charLimit={450}
-              ellipsis
+              charLimit={400}
               readMoreText={'Read more'}
               readLessText={'Read less'}
             >
@@ -87,8 +85,8 @@ const LocationDetail = () => {
             </ReactReadMoreReadLess>
           </p>
         </div>
-        <div className="bottom-0 mb-4 px-4 inset-x-0">
-          <Button className="bg-primary w-full hover:bg-orange-600">
+        <div className="bottom-0 px-4 inset-x-0">
+          <Button className="bg-primary w-full h-12 text-lg hover:bg-orange-600">
             Visit Location
           </Button>
         </div>

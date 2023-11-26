@@ -1,11 +1,6 @@
 import BackNavigator from '@/components/utils/back-navigator';
 import { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -32,11 +27,11 @@ const AskPi = () => {
     },
     {
       role: 'agent',
-      content: 'Go fuck yourself😂',
+      content: 'Book your flight tickets here: https://bookings.com',
     },
     {
       role: 'user',
-      content: 'Oh Chairman',
+      content: 'Thank you',
     },
   ]);
   const [input, setInput] = useState('');

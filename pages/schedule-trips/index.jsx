@@ -2,19 +2,19 @@
 import BackNavigator from '@/components/utils/back-navigator';
 import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
-import { Download, MapPin, CalendarDays } from 'lucide-react';
+import { MapPin, CalendarDays } from 'lucide-react';
 import BottomNavigator from '@/components/shared/bottom-navigator';
 import { locations } from '@/lib/stock-img-locations';
 
 export const Trip = ({ data }) => {
   return (
     <>
-      <div className="w-full mb-4 p-2 h-[112px]  flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
-        <div className="w-[120px] h-auto">
+      <div className="w-full mb-4 p-2 h-[120px] flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
+        <div className="w-[120px] h-full">
           <img
             src={data.image}
             alt="image-location"
-            className="object-contain rounded-xl"
+            className="object-cover w-full h-full rounded-xl"
           />
         </div>
         <div className="flex flex-col py-2">
@@ -51,11 +51,9 @@ const ScheduleTrips = () => {
       <div className="px-4 flex justify-between items-center">
         <div className="flex items-center gap-1 text-gray-600 text-lg">
           <span>My Schedule</span>
-          <Download size={15} color="grey" />
         </div>
-        <small className="text-primary">View all</small>
       </div>
-      <div className="px-4 mt-4  h-[400px] overflow-scroll">
+      <div className="px-4 mt-4  h-full overflow-scroll">
         {locations.map((data, index) => (
           <Trip key={index} data={data} />
         ))}

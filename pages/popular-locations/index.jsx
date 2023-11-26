@@ -8,10 +8,10 @@ export const PopularLocationCard = ({ data }) => {
   return (
     <div className="">
       <div className="rounded-xl cursor-pointer border bg-card text-card-foreground shadow-sm">
-        <div className="gap-y-2 max-w-md h-[230px]">
+        <div className="gap-y-2 max-w-md h-fit pb-2">
           <img
             src={data.image}
-            className="object-contain rounded-t-xl"
+            className="object-cover rounded-t-xl w-full h-[150px]"
             alt="image-location"
           />
           <h2 className="font-semibold px-2 pt-2">{data.name}</h2>
