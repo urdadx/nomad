@@ -2,9 +2,8 @@ import BackNavigator from '@/components/utils/back-navigator';
 import { useState } from 'react';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Mic } from 'lucide-react';
+import { Mic, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const AskPi = () => {
@@ -82,13 +81,23 @@ const AskPi = () => {
               value={input}
               onChange={(event) => setInput(event.target.value)}
             />
-            <Button
-              className="rounded-full bg-primary"
-              type="submit"
-              size="icon"
-            >
-              <Mic className="h-4 w-4" />
-            </Button>
+            {inputLength === 0 ? (
+              <Button
+                className="rounded-full bg-primary"
+                type="submit"
+                size="icon"
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                className="rounded-lg bg-primary"
+                type="submit"
+                size="icon"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            )}
           </form>
         </div>
       </div>

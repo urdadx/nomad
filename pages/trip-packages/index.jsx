@@ -23,13 +23,13 @@ export const Package = ({ data }) => {
               <small className="text-gray-500 text-md">23 January 2023</small>
             </div>
             <div className="flex gap-2 items-center pt-1 overflow-scroll">
-              <span className="flex">
+              <div className="flex">
                 {Array.from({
                   length: Math.floor(Math.random() * (4 - 2 + 1)) + 2,
                 }).map((_, index) => (
                   <StarSVG key={index} />
                 ))}
-              </span>
+              </div>
               <small>{Math.ceil(Math.random() * (4.0 - 1.9)) + 1.9}</small>
             </div>
             <div className="pt-1">
