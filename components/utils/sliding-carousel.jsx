@@ -42,47 +42,48 @@ export const DestinationCard = ({ img, name }) => {
 
 const SlidingCarousel = () => {
   return (
-    <motion.div
-      className="flex"
-      style={{
-        width: '100%',
-        overflowX: 'scroll',
-        scrollSnapType: 'x mandatory',
-      }}
-    >
+    <div className="">
       <motion.div
+        className="flex w-full overflow-x-scroll no-scrollbar"
         style={{
-          flex: '0 0 auto',
-          scrollSnapAlign: 'start',
+          scrollSnapType: 'x mandatory',
         }}
       >
-        <DestinationCard img="/assets/1.jpg" name="Kwame Nkrumah" />
+        <div
+          className="no-scrollbar"
+          style={{
+            flex: '0 0 auto',
+            scrollSnapAlign: 'start',
+          }}
+        >
+          <DestinationCard img="/assets/1.jpg" name="Kwame Nkrumah" />
+        </div>
+        <div
+          style={{
+            flex: '0 0 auto',
+            scrollSnapAlign: 'start',
+          }}
+        >
+          <DestinationCard img="/assets/2.jpg" name="Black Black Sq." />
+        </div>
+        <div
+          style={{
+            flex: '0 0 auto',
+            scrollSnapAlign: 'start',
+          }}
+        >
+          <DestinationCard img="/assets/7.jpg" name="Aqua Safari" />
+        </div>
+        <div
+          style={{
+            flex: '0 0 auto',
+            scrollSnapAlign: 'start',
+          }}
+        >
+          <DestinationCard img="/assets/4.jpg" name="Kakum Park" />
+        </div>
       </motion.div>
-      <motion.div
-        style={{
-          flex: '0 0 auto',
-          scrollSnapAlign: 'start',
-        }}
-      >
-        <DestinationCard img="/assets/2.jpg" name="Black Black Sq." />
-      </motion.div>
-      <motion.div
-        style={{
-          flex: '0 0 auto',
-          scrollSnapAlign: 'start',
-        }}
-      >
-        <DestinationCard img="/assets/7.jpg" name="Aqua Safari" />
-      </motion.div>
-      <motion.div
-        style={{
-          flex: '0 0 auto',
-          scrollSnapAlign: 'start',
-        }}
-      >
-        <DestinationCard img="/assets/4.jpg" name="Kakum Park" />
-      </motion.div>
-    </motion.div>
+    </div>
   );
 };
 

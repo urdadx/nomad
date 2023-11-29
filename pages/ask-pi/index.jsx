@@ -57,7 +57,7 @@ const AskPi = () => {
             ))}
           </div>
         </CardContent>
-        <div className="px-4 my-2 fixed inset-x-0 bottom-2 border-t pt-4">
+        <div className="px-4 my-2 lg:w-[400px] mx-auto fixed inset-x-0 bottom-2 border-t pt-4">
           <form
             onSubmit={(event) => {
               event.preventDefault();

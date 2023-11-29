@@ -4,11 +4,10 @@ import StarSVG from '@/components/utils/star-svg';
 import { Wifi, Utensils, Bath, Waves, MapPin, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
-import Layout from '@/components/layout/layout';
 
 const LocationDetail = () => {
   return (
-    <Layout>
+    <>
       <div className="relative w-full">
         <BackNavigator name="Detail" isTransparent={true} bookmark={true} />
         <div className="bg-contain w-full h-[450px]">
@@ -92,7 +91,7 @@ const LocationDetail = () => {
           </Button>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 const BottomNavigator = () => {
   return (
-    <>
-      <div className="fixed inset-x-0 bottom-0 bg-white shadow-md border-t">
+    <div className="max-w-[400px]">
+      <div className="fixed  mx-auto lg:w-[400px] inset-x-0 bottom-0 bg-white shadow-md border-t">
         <div className="flex justify-between max-w-md mx-auto p-4">
-          <Link href="/home" className="flex flex-col items-center">
+          <Link href="/" className="flex flex-col items-center">
             <Home className="h-6 w-6" />
             <span className="text-xs">Home</span>
           </Link>
@@ -30,7 +30,7 @@ const BottomNavigator = () => {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

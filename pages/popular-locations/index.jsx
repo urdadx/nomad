@@ -19,7 +19,7 @@ export const PopularLocationCard = ({ data }) => {
             <MapPin size={18} color="grey" />
             <small>{data.location}</small>
           </div>
-          <div className="flex gap-2 items-center px-2 h-auto overflow-scroll">
+          <div className="flex gap-2 items-center px-2 h-auto">
             <span className="flex">
               {Array.from({
                 length: Math.floor(Math.random() * (4 - 2 + 1)) + 2,

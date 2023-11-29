@@ -1,6 +1,5 @@
 import { Bookmark, Phone, Pen, ChevronLeft, BellDot } from 'lucide-react';
 import { useRouter } from 'next/router';
-import Layout from '../layout/layout';
 
 const BackNavigator = ({
   name,

@@ -70,7 +70,7 @@ const SearchLocation = () => {
       {Array.from({ length: 2 }).map((_, index) => (
         <SearchInfo key={index} />
       ))}
-      <div className="h-[50px]" />
+      <div className="h-[90px]" />
       <div className="">
         <BottomNavigator />
       </div>

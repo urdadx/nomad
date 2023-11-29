@@ -32,7 +32,7 @@ export const Form = ({ type }) => {
             if (res.status === 409) {
               toast.success('Login successful');
               setTimeout(() => {
-                router.push('/home');
+                router.push('/');
               }, 1200);
             } else {
               toast.error("You don't have an account");
@@ -58,7 +58,7 @@ export const Form = ({ type }) => {
             if (res.status === 201) {
               toast.success('Account created! ');
               setTimeout(() => {
-                router.push('/home');
+                router.push('/');
               }, 1200);
             } else {
               toast.error('An error occured');

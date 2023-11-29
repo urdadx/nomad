@@ -86,7 +86,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="px-4">
+      <div className="px-4 no-scrollbar">
         <div className="my-4 p-2 border rounded-2xl w-full h-auto bg-card text-card-foreground shadow-sm">
           <div className="grid grid-rows-5 ">
             {navigators?.map((item, index) => {

@@ -40,7 +40,7 @@ const ScheduleTrips = () => {
   return (
     <>
       <BackNavigator name="Schedule" showNotification={true} />
-      <div className="container my-6 flex justify-center">
+      <div className="container my-6 flex justify-center ">
         <Calendar
           mode="single"
           selected={date}
@@ -53,7 +53,7 @@ const ScheduleTrips = () => {
           <span>My Schedule</span>
         </div>
       </div>
-      <div className="px-4 mt-4  h-full overflow-scroll">
+      <div className="px-4 mt-4  h-full no-scrollbar">
         {locations.map((data, index) => (
           <Trip key={index} data={data} />
         ))}

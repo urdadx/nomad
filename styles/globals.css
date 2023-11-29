@@ -95,3 +95,12 @@ body {
   background-size: 300% 300%;
   animation: textShine 6s ease-in-out infinite alternate;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0px !important;
+}
+
+.no-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #f4f5fa;
+}

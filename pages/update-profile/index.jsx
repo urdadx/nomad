@@ -26,7 +26,7 @@ const UpdateProfile = () => {
           </small>
         </div>
       </div>
-      <div className="px-6 h-full overflow-scroll">
+      <div className="px-6 h-full no-scrollbar">
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="email">Username</Label>
           <Input
@@ -64,6 +64,7 @@ const UpdateProfile = () => {
           />
         </div>
       </div>
+      <div className="h-[100px]" />
       <BottomNavigator />
     </>
   );
