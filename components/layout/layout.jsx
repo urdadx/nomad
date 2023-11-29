@@ -1,7 +1,7 @@
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
     <>
-      <div className=""></div>
+      <section className="w-[400px] h-full mx-auto border">{children}</section>
     </>
   );
 };

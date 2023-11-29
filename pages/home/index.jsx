@@ -20,7 +20,7 @@ const Home = () => {
               <strong className="text-primary text-extrabold">
                 <RoughNotation
                   type="underline"
-                  strokeWidth={2}
+                  strokeWidth={3}
                   animate={true}
                   show={true}
                 >
@@ -71,7 +71,7 @@ const Home = () => {
             Get a personalized itinerary just for you, guided by traveler tips
             and reviews
           </p>
-          <div className="bg-contain w-[300px] h-[250px] mt-2 rounded-2xl cursor-pointer">
+          <div className="bg-contain mx-auto w-[300px] h-[250px] mt-2 rounded-2xl cursor-pointer">
             <img
               src="/assets/chatbot.png"
               alt="chat-bot"
