@@ -5,10 +5,6 @@ export default async function handler(req, res) {
 
   if (req.method !== 'POST') {
     res.status(405).json({ message: 'Method should be POST' });
-  } else if (process.env.NODE_ENV !== 'development') {
-    if (!referer || referer !== process.env.APP_URL) {
-      res.status(401).json({ message: 'Unauthorized' });
-    }
   } else {
     try {
       const { body } = req;
