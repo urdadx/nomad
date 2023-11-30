@@ -10,10 +10,10 @@ const LocationDetail = () => {
     <>
       <div className="relative w-full">
         <BackNavigator name="Detail" isTransparent={true} bookmark={true} />
-        <div className="bg-contain w-full h-[450px]">
+        <div className="bg-contain w-full h-[450px] ">
           <img
             src="/assets/2.jpg"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover lg:rounded-xl"
             alt="image-location"
           />
         </div>

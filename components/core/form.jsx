@@ -35,7 +35,7 @@ export const Form = ({ type }) => {
                 router.push('/');
               }, 1200);
             } else {
-              toast.error("You don't have an account");
+              toast.error("You don't have an account. Create new");
               setTimeout(() => {
                 router.push('/register');
               }, 1200);
@@ -71,6 +71,7 @@ export const Form = ({ type }) => {
       <div className="flex flex-col gap-8">
         {type === 'register' && (
           <Input
+            required
             name="username"
             className="rounded-lg h-12 text-md"
             type="text"
@@ -78,19 +79,21 @@ export const Form = ({ type }) => {
           />
         )}
         <Input
+          required
           name="email"
           className="rounded-lg h-12 text-md"
           type="text"
           placeholder="Email"
         />
         <Input
+          required
           name="password"
           className="rounded-lg h-12 text-md"
           type="password"
           placeholder="Password"
         />
       </div>
-      <p className="text-right font-semibold my-4 text-gray-600">
+      <p className="text-right cursor-pointer font-semibold my-4 text-gray-600">
         Forgot Password?
       </p>
       <div className="my-6 ">
@@ -99,13 +102,15 @@ export const Form = ({ type }) => {
           className={`${
             loading
               ? 'cursor-not-allowed w-full bg-black'
-              : 'w-full h-12 bg-black text-white hover:bg-slate-800'
+              : 'w-full h-12 bg-black text-white hover:bg-slate-700'
           }`}
         >
           {loading ? (
             <LoadingDots />
           ) : (
-            <p>{type === 'login' ? 'Sign In' : 'Sign Up'}</p>
+            <p className="lg:text-lg">
+              {type === 'login' ? 'Sign In' : 'Sign Up'}
+            </p>
           )}
         </Button>
       </div>

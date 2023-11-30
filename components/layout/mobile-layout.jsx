@@ -1,7 +1,7 @@
 const MobileLayout = ({ children }) => {
   return (
     <>
-      <section className="lg:w-[400px] mx-auto lg:p-2 border min-h-full rounded-t-xl lg:mt-6">
+      <section className="lg:w-[400px] mx-auto lg:p-2 border min-h-screen rounded-t-xl lg:mt-6">
         {children}
       </section>
     </>

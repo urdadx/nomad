@@ -11,11 +11,10 @@ export default function App({ Component, pageProps }) {
     <>
       <QueryClientProvider client={queryClient}>
         <Toaster position="bottom-center" />
-
         <MobileLayout>
           <Component {...pageProps} />
         </MobileLayout>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </>
   );

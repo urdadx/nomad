@@ -93,7 +93,7 @@ const Profile = () => {
               return (
                 <div key={index}>
                   <Link className="" href={item.link}>
-                    <div className="flex justify-between mb-2 p-4 cursor-pointer hover:bg-gray-100">
+                    <div className="flex justify-between mb-2 p-4 cursor-pointer rounded-xl hover:bg-gray-100">
                       <div className="flex gap-2">
                         {item.icon}
                         <span>{item.name}</span>
