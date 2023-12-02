@@ -21,11 +21,7 @@ const SearchLocation = () => {
 
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState({
-    walking: '',
-    driving: '',
-    motorcycle: '',
-  });
+  const [duration, setDuration] = useState(null);
   const [destinationLatLng, setDestinationLatLng] = useState(null);
   const [noRouteFound, setNoRouteFound] = useState(false);
 
@@ -51,25 +47,10 @@ const SearchLocation = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       });
 
-      const walkingMode = await directionsService.route({
-        origin: originRef.current.value,
-        destination: destinationRef.current.value,
-        travelMode: google.maps.TravelMode.WALKING,
-      });
-
-      const motorcycleMode = await directionsService.route({
-        origin: originRef.current.value,
-        destination: destinationRef.current.value,
-        travelMode: google.maps.TravelMode.TWO_WHEELER,
-      });
       if (drivingMode && drivingMode.routes && drivingMode.routes.length > 0) {
         setDirectionsResponse(drivingMode);
         setDistance(drivingMode.routes[0].legs[0].distance.text);
-        setDuration({
-          walking: walkingMode.routes[0].legs[0].duration.text,
-          driving: drivingMode.routes[0].legs[0].duration.text,
-          motorcycle: motorcycleMode.routes[0].legs[0].duration.text,
-        });
+        setDuration(drivingMode.routes[0].legs[0].duration.text);
 
         // Extract latitude and longitude of the destination
         const destinationLocation = drivingMode.routes[0].legs[0].end_location;
@@ -184,28 +165,17 @@ export const SearchInfo = ({ duration, destination, distance, cordinates }) => {
                 {destination}
               </h2>
             </div>
-            <div className="px-4 my-2 flex items-center gap-4">
+            <div className="px-2 my-2 flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <CarFront size={17} />
+                <CarFront size={18} /> {''}
+                Approximately
                 <strong className="truncate w-[65px] text-primary">
-                  {duration.driving}
-                </strong>
-              </div>
-              <div className="flex items-center gap-2">
-                <Footprints size={17} />
-                <strong className="truncate w-[65px] text-primary">
-                  {duration.walking}
-                </strong>
-              </div>
-              <div className="flex items-center gap-2">
-                <Bike size={17} />
-                <strong className="truncate w-[65px] text-primary">
-                  {duration.motorcycle}
+                  {duration}
                 </strong>
               </div>
             </div>
             <Link
-              href={`/maps-direction?longitude=${cordinates.longitude}&latitude=${cordinates.latitude}&time=${duration.driving}&distance=${distance}&destination=${destination}`}
+              href={`/maps-direction?longitude=${cordinates.longitude}&latitude=${cordinates.latitude}&time=${duration}&distance=${distance}&destination=${destination}`}
               className="flex justify-center mt-4"
             >
               <Button className="flex items-center gap-1 bg-primary text-white px-10 rounded-xl">
