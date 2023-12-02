@@ -98,7 +98,7 @@ const MapsDirection = () => {
                     map.panTo(center);
                     map.setZoom(20);
                   }}
-                  className="mt-8 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full"
+                  className="mt-6 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full"
                 >
                   Select Route
                 </Button>
