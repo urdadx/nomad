@@ -9,7 +9,7 @@ import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 import { useState, useRef } from 'react';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { toast } from 'react-hot-toast';
-import { CarFront, Footprints, Bike } from 'lucide-react';
+import { CarFront } from 'lucide-react';
 
 const libraries = ['places'];
 
@@ -169,9 +169,7 @@ export const SearchInfo = ({ duration, destination, distance, cordinates }) => {
               <div className="flex items-center gap-2">
                 <CarFront size={18} /> {''}
                 Approximately
-                <strong className="truncate w-[65px] text-primary">
-                  {duration}
-                </strong>
+                <strong className="text-primary">{duration}</strong>
               </div>
             </div>
             <Link
