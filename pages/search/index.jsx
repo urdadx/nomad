@@ -10,15 +10,18 @@ import { useState, useRef } from 'react';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { toast } from 'react-hot-toast';
 
+const libraries = ['places'];
+
 const SearchLocation = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY,
-    libraries: ['places'],
+    libraries,
   });
 
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
+  const [destinationLatLng, setDestinationLatLng] = useState(null);
 
   const originRef = useRef();
   const destinationRef = useRef();
@@ -45,9 +48,16 @@ const SearchLocation = () => {
       setDirectionsResponse(results);
       setDistance(results.routes[0].legs[0].distance.text);
       setDuration(results.routes[0].legs[0].duration.text);
+
+      // Extract latitude and longitude of the destination
+      const destinationLocation = results.routes[0].legs[0].end_location;
+      setDestinationLatLng({
+        latitude: destinationLocation.lat(),
+        longitude: destinationLocation.lng(),
+      });
     } catch (error) {
-      console.error('Error calculating route:', error);
-      toast.error('Error calculating route:', error);
+      console.error('Error calculating route', error);
+      toast.error('Error calculating route', error);
     } finally {
       setLoading(false);
     }
@@ -119,6 +129,7 @@ const SearchLocation = () => {
           duration={duration}
           distance={distance}
           destination={destinationRef.current.value}
+          cordinates={destinationLatLng}
         />
       ) : (
         <div className="flex w-full justify-center mt-8">
@@ -132,7 +143,7 @@ const SearchLocation = () => {
   );
 };
 
-export const SearchInfo = ({ duration, destination, distance }) => {
+export const SearchInfo = ({ duration, destination, distance, cordinates }) => {
   return (
     <>
       <div className="px-4">
@@ -149,7 +160,10 @@ export const SearchInfo = ({ duration, destination, distance }) => {
                 <strong className="text-primary">{distance}</strong>
               </div>
             </div>
-            <Link href="/maps-direction" className="flex justify-center">
+            <Link
+              href={`/maps-direction?longitude=${cordinates.longitude}&latitude=${cordinates.latitude}&time=${duration}&distance=${distance}&destination=${destination}`}
+              className="flex justify-center"
+            >
               <Button className="flex items-center gap-1 bg-primary text-white px-10 rounded-xl">
                 <span>Start</span>
                 <span>

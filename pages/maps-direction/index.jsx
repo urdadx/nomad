@@ -1,17 +1,42 @@
 /* eslint-disable no-undef */
+import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api';
 import { Rings } from 'react-loader-spinner';
+import { useRouter } from 'next/router';
+
+const libraries = ['places'];
 
 const MapsDirection = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY,
-    libraries: ['places'],
+    libraries,
   });
 
-  const center = { lat: 48.8584, lng: 2.2945 };
+  const [center, setCenter] = useState(null);
+  const [distance, setDistance] = useState(null);
+  const [duration, setDuration] = useState(null);
+  const [destination, setDestination] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const { query } = router;
+    const { longitude, latitude, time, distance, destination } = query;
+
+    if (longitude && latitude && time && distance && destination) {
+      const markerCoordinates = {
+        lat: parseFloat(latitude),
+        lng: parseFloat(longitude),
+      };
+
+      setCenter(markerCoordinates);
+      setDistance(distance);
+      setDuration(time);
+      setDestination(destination);
+    }
+  }, [router, router.query]);
 
   if (!isLoaded) {
     return (
@@ -41,7 +66,6 @@ const MapsDirection = () => {
               width: '100%',
               height: '100%',
               borderRadius: '10px',
-              borderColor: '#000',
             }}
           >
             <Marker position={center} />
@@ -56,14 +80,14 @@ const MapsDirection = () => {
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8 sm:mb-4" />
               <div className="max-w-md mx-auto">
                 <Drawer.Title className="font-semibold text-2xl flex items-center gap-1 mb-6 sm:mb-4">
-                  <p>Berekuso</p>
-                  <MapPin size={20} />
+                  <p className="truncate w-[250px]">{destination}</p>
+                  <MapPin size={24} />
                 </Drawer.Title>
                 <p className="text-zinc-600 mb-2">
-                  Time: <strong>20 mins</strong>
+                  Time: <strong>{duration}</strong>
                 </p>
                 <p className="text-zinc-600 mb-2">
-                  Total Distance: <strong>40km</strong>
+                  Total Distance: <strong>{distance}</strong>
                 </p>
                 <Button className="mt-12 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full">
                   Select Route
