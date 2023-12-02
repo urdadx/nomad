@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api';
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Marker,
+  DirectionsRenderer,
+} from '@react-google-maps/api';
 import { Rings } from 'react-loader-spinner';
 import { useRouter } from 'next/router';
 
@@ -21,6 +26,7 @@ const MapsDirection = () => {
   const [destination, setDestination] = useState('');
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
 
+  const [openDrawer, setOpenDrawer] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -72,11 +78,12 @@ const MapsDirection = () => {
             onLoad={(map) => setMap(map)}
           >
             <Marker position={center} />
+            <DirectionsRenderer />
           </GoogleMap>
         </div>
       </section>
 
-      <Drawer.Root open={true} shouldScaleBackground>
+      <Drawer.Root open={openDrawer} shouldScaleBackground>
         <Drawer.Portal>
           <Drawer.Content className="bg-zinc-100 lg:w-[395px] mx-auto flex flex-col rounded-t-[10px] h-[35%] mt-24 fixed bottom-0 left-0 right-0 border">
             <div className="p-4 bg-white rounded-t-[10px] flex-1">
@@ -95,8 +102,8 @@ const MapsDirection = () => {
                 </p>
                 <Button
                   onClick={() => {
+                    setOpenDrawer(false);
                     map.panTo(center);
-                    map.setZoom(20);
                   }}
                   className="mt-6 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full"
                 >
