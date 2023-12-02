@@ -10,6 +10,8 @@ import {
 } from '@react-google-maps/api';
 import { Rings } from 'react-loader-spinner';
 import { useRouter } from 'next/router';
+import { useStore } from '@/contexts/map-context';
+import useMediaQuery from '@/hooks/use-media-query';
 
 const libraries = ['places'];
 
@@ -24,6 +26,9 @@ const MapsDirection = () => {
   const [duration, setDuration] = useState(null);
   const [destination, setDestination] = useState('');
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+
+  const { response } = useStore();
+  const { isDesktop } = useMediaQuery();
 
   const [openDrawer, setOpenDrawer] = useState(true);
   const router = useRouter();
@@ -72,12 +77,12 @@ const MapsDirection = () => {
             mapContainerStyle={{
               width: '100%',
               height: '100%',
-              borderRadius: '10px',
+              borderRadius: isDesktop && '10px',
             }}
             onLoad={(map) => setMap(map)}
           >
             <Marker position={center} />
-            <DirectionsRenderer />
+            {response && <DirectionsRenderer directions={response} />}
           </GoogleMap>
         </div>
       </section>

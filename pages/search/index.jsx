@@ -10,6 +10,7 @@ import { useState, useRef } from 'react';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { toast } from 'react-hot-toast';
 import { CarFront } from 'lucide-react';
+import { useStore } from '@/contexts/map-context';
 
 const libraries = ['places'];
 
@@ -18,6 +19,8 @@ const SearchLocation = () => {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY,
     libraries,
   });
+
+  const { setResponse } = useStore();
 
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
@@ -49,6 +52,7 @@ const SearchLocation = () => {
 
       if (drivingMode && drivingMode.routes && drivingMode.routes.length > 0) {
         setDirectionsResponse(drivingMode);
+        setResponse(drivingMode);
         setDistance(drivingMode.routes[0].legs[0].distance.text);
         setDuration(drivingMode.routes[0].legs[0].duration.text);
 
