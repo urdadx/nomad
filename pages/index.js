@@ -81,7 +81,7 @@ const Home = () => {
           <div className="h-[100px]" />
         </div>
       </section>
-      <BottomNavigator />
+      {/* <BottomNavigator /> */}
     </>
   );
 };

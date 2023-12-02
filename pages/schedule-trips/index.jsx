@@ -59,7 +59,6 @@ const ScheduleTrips = () => {
         ))}
         <div className="h-[100px]" />
       </div>
-      <BottomNavigator />
     </>
   );
 };

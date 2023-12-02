@@ -1,12 +1,138 @@
-import BottomNavigator from '@/components/shared/bottom-navigator';
+// eslint-disable-next-line no-undef
 import BackNavigator from '@/components/utils/back-navigator';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Navigation } from 'lucide-react';
 import { LocateFixed, MapPin } from 'lucide-react';
+import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
+import { useState, useRef } from 'react';
+import LoadingDots from '@/components/utils/loading-dots/loading-dots';
+import { toast } from 'react-hot-toast';
 
-export const SearchInfo = () => {
+const SearchLocation = () => {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY,
+    libraries: ['places'],
+  });
+
+  const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
+
+  const originRef = useRef();
+  const destinationRef = useRef();
+  const [loading, setLoading] = useState(false);
+
+  const calculateRouteInfo = async (e) => {
+    e.preventDefault();
+    if (originRef.current.value === '' || destinationRef.current.value === '') {
+      return;
+    }
+    setLoading(true);
+
+    const directionsService = new google.maps.DirectionsService();
+    try {
+      // Simulate an API call delay of 500 ms
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const results = await directionsService.route({
+        origin: originRef.current.value,
+        destination: destinationRef.current.value,
+        travelMode: google.maps.TravelMode.DRIVING,
+      });
+
+      setDirectionsResponse(results);
+      setDistance(results.routes[0].legs[0].distance.text);
+      setDuration(results.routes[0].legs[0].duration.text);
+    } catch (error) {
+      console.error('Error calculating route:', error);
+      toast.error('Error calculating route:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <BackNavigator name="Search" cancel={true} />
+      <form className="px-4 my-6 flex flex-col gap-y-5">
+        <div className="relative">
+          {isLoaded ? (
+            <Autocomplete>
+              <Input
+                required
+                ref={originRef}
+                className="rounded-xl h-12 text-md pl-10 pr-4"
+                type="text"
+                placeholder="Your Location"
+              />
+            </Autocomplete>
+          ) : (
+            <Input
+              className="rounded-xl h-12 text-md pl-10 pr-4"
+              type="text"
+              placeholder="Your Location"
+            />
+          )}
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+            <LocateFixed size={20} />
+          </span>
+        </div>
+        <div className="relative">
+          {isLoaded ? (
+            <Autocomplete>
+              <Input
+                required
+                ref={destinationRef}
+                className="rounded-xl h-12 text-md pl-10 pr-4"
+                type="text"
+                placeholder="Destination"
+              />
+            </Autocomplete>
+          ) : (
+            <Input
+              className="rounded-xl h-12 text-md pl-10 pr-4"
+              type="text"
+              placeholder="Destination"
+            />
+          )}
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+            <MapPin size={20} />
+          </span>
+        </div>
+        <div className="relative">
+          <Button
+            type="submit"
+            onClick={calculateRouteInfo}
+            className="text-white bg-primary w-full h-12 rounded-xl text-lg font-semibold hover:bg-orange-400"
+          >
+            {loading ? <LoadingDots /> : <p>Search</p>}{' '}
+          </Button>
+        </div>
+      </form>
+      <div className="px-4">
+        <h2 className="text-lg font-semibold">Search Routes</h2>
+      </div>
+      {!loading && directionsResponse ? (
+        <SearchInfo
+          duration={duration}
+          distance={distance}
+          destination={destinationRef.current.value}
+        />
+      ) : (
+        <div className="flex w-full justify-center mt-8">
+          <p className="text-center font-semibold text-zinc-400">
+            No routes to display
+          </p>
+        </div>
+      )}
+      <div className="h-[90px]" />
+    </>
+  );
+};
+
+export const SearchInfo = ({ duration, destination, distance }) => {
   return (
     <>
       <div className="px-4">
@@ -14,65 +140,25 @@ export const SearchInfo = () => {
           <div className="p-2">
             <div className="flex justify-between">
               <h2>
-                <strong className="text-primary">40 mins</strong> to Berekuso
+                <strong className="text-primary">{duration}</strong> to{' '}
+                {destination}
               </h2>
-              <Link className="text-primary font-semibold" href="/">
-                See more
-              </Link>
             </div>
             <div className="my-2">
-              <h2>11km</h2>
+              <div className="flex items-center gap-2">
+                <strong className="text-primary">{distance}</strong>
+              </div>
             </div>
-            <div className="flex justify-center">
-              <Button className="flex items-center gap-1 bg-primary text-white px-10 rounded-2xl">
+            <Link href="/maps-direction" className="flex justify-center">
+              <Button className="flex items-center gap-1 bg-primary text-white px-10 rounded-xl">
                 <span>Start</span>
                 <span>
                   <Navigation size={17} />
                 </span>
               </Button>
-            </div>
+            </Link>
           </div>
         </div>
-      </div>
-    </>
-  );
-};
-
-const SearchLocation = () => {
-  return (
-    <>
-      <BackNavigator name="Search" cancel={true} />
-      <div className="px-4 my-6 flex flex-col gap-y-5">
-        <div className="relative">
-          <Input
-            className="rounded-xl h-12 text-md pl-10 pr-4"
-            type="text"
-            placeholder="Your Location"
-          />
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-            <LocateFixed size={20} />
-          </span>
-        </div>
-        <div className="relative">
-          <Input
-            className="rounded-xl h-12 text-md pl-10 pr-4"
-            type="text"
-            placeholder="Destination"
-          />
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-            <MapPin size={20} />
-          </span>
-        </div>
-      </div>
-      <div className="px-4">
-        <h2 className="text-lg font-semibold">Search Routes</h2>
-      </div>
-      {Array.from({ length: 2 }).map((_, index) => (
-        <SearchInfo key={index} />
-      ))}
-      <div className="h-[90px]" />
-      <div className="">
-        <BottomNavigator />
       </div>
     </>
   );

@@ -70,7 +70,7 @@ const AskPi = () => {
           >
             <div
               className={cn(
-                'flex w-max bg-muted max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm'
+                'flex w-max bg-blue-100 max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm'
               )}
             >
               Hi, How can I help you today?
@@ -82,7 +82,7 @@ const AskPi = () => {
                   'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
                   message.type === 'user'
                     ? 'ml-auto bg-primary text-primary-foreground'
-                    : 'bg-muted'
+                    : 'bg-blue-100'
                 )}
               >
                 {message.message}

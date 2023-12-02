@@ -65,7 +65,6 @@ const UpdateProfile = () => {
         </div>
       </div>
       <div className="h-[100px]" />
-      <BottomNavigator />
     </>
   );
 };
