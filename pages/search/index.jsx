@@ -9,6 +9,7 @@ import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 import { useState, useRef } from 'react';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { toast } from 'react-hot-toast';
+import { CarFront, Footprints, Bike } from 'lucide-react';
 
 const libraries = ['places'];
 
@@ -20,8 +21,13 @@ const SearchLocation = () => {
 
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState({
+    walking: '',
+    driving: '',
+    motorcycle: '',
+  });
   const [destinationLatLng, setDestinationLatLng] = useState(null);
+  const [noRouteFound, setNoRouteFound] = useState(false);
 
   const originRef = useRef();
   const destinationRef = useRef();
@@ -39,25 +45,46 @@ const SearchLocation = () => {
       // Simulate an API call delay of 500 ms
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const results = await directionsService.route({
+      const drivingMode = await directionsService.route({
         origin: originRef.current.value,
         destination: destinationRef.current.value,
         travelMode: google.maps.TravelMode.DRIVING,
       });
 
-      setDirectionsResponse(results);
-      setDistance(results.routes[0].legs[0].distance.text);
-      setDuration(results.routes[0].legs[0].duration.text);
-
-      // Extract latitude and longitude of the destination
-      const destinationLocation = results.routes[0].legs[0].end_location;
-      setDestinationLatLng({
-        latitude: destinationLocation.lat(),
-        longitude: destinationLocation.lng(),
+      const walkingMode = await directionsService.route({
+        origin: originRef.current.value,
+        destination: destinationRef.current.value,
+        travelMode: google.maps.TravelMode.WALKING,
       });
+
+      const motorcycleMode = await directionsService.route({
+        origin: originRef.current.value,
+        destination: destinationRef.current.value,
+        travelMode: google.maps.TravelMode.TWO_WHEELER,
+      });
+      if (drivingMode && drivingMode.routes && drivingMode.routes.length > 0) {
+        setDirectionsResponse(drivingMode);
+        setDistance(drivingMode.routes[0].legs[0].distance.text);
+        setDuration({
+          walking: walkingMode.routes[0].legs[0].duration.text,
+          driving: drivingMode.routes[0].legs[0].duration.text,
+          motorcycle: motorcycleMode.routes[0].legs[0].duration.text,
+        });
+
+        // Extract latitude and longitude of the destination
+        const destinationLocation = drivingMode.routes[0].legs[0].end_location;
+        setDestinationLatLng({
+          latitude: destinationLocation.lat(),
+          longitude: destinationLocation.lng(),
+        });
+        setNoRouteFound(false);
+      } else {
+        setNoRouteFound(true);
+      }
     } catch (error) {
       console.error('Error calculating route', error);
-      toast.error('Error calculating route', error);
+      toast.error('No feasible route was found', error);
+      setNoRouteFound(true);
     } finally {
       setLoading(false);
     }
@@ -117,14 +144,14 @@ const SearchLocation = () => {
             onClick={calculateRouteInfo}
             className="text-white bg-primary w-full h-12 rounded-xl text-lg font-semibold hover:bg-orange-400"
           >
-            {loading ? <LoadingDots /> : <p>Search</p>}{' '}
+            {loading ? <LoadingDots /> : <p>Search</p>}
           </Button>
         </div>
       </form>
       <div className="px-4">
         <h2 className="text-lg font-semibold">Search Routes</h2>
       </div>
-      {!loading && directionsResponse ? (
+      {!loading && !noRouteFound && directionsResponse ? (
         <SearchInfo
           duration={duration}
           distance={distance}
@@ -133,8 +160,10 @@ const SearchLocation = () => {
         />
       ) : (
         <div className="flex w-full justify-center mt-8">
-          <p className="text-center font-semibold text-zinc-400">
-            No routes to display
+          <p className="text-center text-lg font-semibold text-zinc-500">
+            {noRouteFound
+              ? 'No feasible route was found'
+              : 'No routes to display'}
           </p>
         </div>
       )}
@@ -149,20 +178,35 @@ export const SearchInfo = ({ duration, destination, distance, cordinates }) => {
       <div className="px-4">
         <div className="my-6 p-2 w-full h-auto rounded-xl border bg-card text-card-foreground shadow-sm">
           <div className="p-2">
-            <div className="flex justify-between">
-              <h2>
-                <strong className="text-primary">{duration}</strong> to{' '}
+            <div className="px-2 flex justify-between">
+              <h2 className="truncate w-[300px]">
+                <strong className="text-primary">{distance}</strong> to{' '}
                 {destination}
               </h2>
             </div>
-            <div className="my-2">
+            <div className="px-4 my-2 flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <strong className="text-primary">{distance}</strong>
+                <CarFront size={17} />
+                <strong className="truncate w-[65px] text-primary">
+                  {duration.driving}
+                </strong>
+              </div>
+              <div className="flex items-center gap-2">
+                <Footprints size={17} />
+                <strong className="truncate w-[65px] text-primary">
+                  {duration.walking}
+                </strong>
+              </div>
+              <div className="flex items-center gap-2">
+                <Bike size={17} />
+                <strong className="truncate w-[65px] text-primary">
+                  {duration.motorcycle}
+                </strong>
               </div>
             </div>
             <Link
-              href={`/maps-direction?longitude=${cordinates.longitude}&latitude=${cordinates.latitude}&time=${duration}&distance=${distance}&destination=${destination}`}
-              className="flex justify-center"
+              href={`/maps-direction?longitude=${cordinates.longitude}&latitude=${cordinates.latitude}&time=${duration.driving}&distance=${distance}&destination=${destination}`}
+              className="flex justify-center mt-4"
             >
               <Button className="flex items-center gap-1 bg-primary text-white px-10 rounded-xl">
                 <span>Start</span>

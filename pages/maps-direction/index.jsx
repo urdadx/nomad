@@ -19,6 +19,8 @@ const MapsDirection = () => {
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
   const [destination, setDestination] = useState('');
+  const [map, setMap] = useState(/** @type google.maps.Map */ (null));
+
   const router = useRouter();
 
   useEffect(() => {
@@ -67,6 +69,7 @@ const MapsDirection = () => {
               height: '100%',
               borderRadius: '10px',
             }}
+            onLoad={(map) => setMap(map)}
           >
             <Marker position={center} />
           </GoogleMap>
@@ -80,16 +83,23 @@ const MapsDirection = () => {
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8 sm:mb-4" />
               <div className="max-w-md mx-auto">
                 <Drawer.Title className="font-semibold text-2xl flex items-center gap-1 mb-6 sm:mb-4">
-                  <p className="truncate w-[250px]">{destination}</p>
+                  <p className="truncate w-[230px]">{destination}</p>
                   <MapPin size={24} />
                 </Drawer.Title>
                 <p className="text-zinc-600 mb-2">
-                  Time: <strong>{duration}</strong>
+                  Time: <strong className="text-primary">{duration}</strong>
                 </p>
                 <p className="text-zinc-600 mb-2">
-                  Total Distance: <strong>{distance}</strong>
+                  Total Distance:{' '}
+                  <strong className="text-primary">{distance}</strong>
                 </p>
-                <Button className="mt-12 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full">
+                <Button
+                  onClick={() => {
+                    map.panTo(center);
+                    map.setZoom(20);
+                  }}
+                  className="mt-8 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full"
+                >
                   Select Route
                 </Button>
               </div>
