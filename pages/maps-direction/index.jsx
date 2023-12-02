@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
-import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   useJsApiLoader,
@@ -69,7 +68,7 @@ const MapsDirection = () => {
         <div className="lg:w-[382px] w-full h-screen">
           <GoogleMap
             center={center}
-            zoom={15}
+            zoom={13}
             mapContainerStyle={{
               width: '100%',
               height: '100%',
@@ -91,7 +90,6 @@ const MapsDirection = () => {
               <div className="max-w-md mx-auto">
                 <Drawer.Title className="font-semibold text-2xl flex items-center gap-1 mb-6 sm:mb-4">
                   <p className="truncate w-[230px]">{destination}</p>
-                  <MapPin size={24} />
                 </Drawer.Title>
                 <p className="text-zinc-600 mb-2">
                   Time: <strong className="text-primary">{duration}</strong>
@@ -104,6 +102,7 @@ const MapsDirection = () => {
                   onClick={() => {
                     setOpenDrawer(false);
                     map.panTo(center);
+                    map.setZoom(15);
                   }}
                   className="mt-6 lg:mt-4 h-12 rounded-xl text-lg text-white bg-primary w-full"
                 >
