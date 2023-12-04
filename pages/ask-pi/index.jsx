@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Mic, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import { createParser } from 'eventsource-parser';
 
 const AskPi = () => {
   const [input, setInput] = useState('');
@@ -25,27 +25,58 @@ const AskPi = () => {
   };
 
   const sendMessage = async (message) => {
-    const data = {
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content:
-            "You are a trip planning assistant. Based on the user's questions, provide suggestions and information for planning a trip to the location the user mentions. The user will write the details, and you will assist with relevant recommendations, tips and advice to make the trip an exciting one. Replies should focus on trip planning aspects only.",
-        },
-        { role: 'user', content: message },
-      ],
-    };
-
     setIsLoading(true);
-
     try {
-      const response = await axios.post('/api/chat', data);
-      console.log(response);
-      setChatLog((prevChatLog) => [
-        ...prevChatLog,
-        { type: 'bot', message: response.data.choices[0].message.content },
-      ]);
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      // This data is a ReadableStream
+      const data = response.body;
+      if (!data) {
+        return;
+      }
+
+      const onParse = (event) => {
+        if (event.type === 'event') {
+          const data = event.data;
+          try {
+            const text = JSON.parse(data).text ?? '';
+            setChatLog((prevChatLog) => [
+              ...prevChatLog,
+              {
+                type: 'bot',
+                message: text,
+              },
+            ]);
+            console.log(text);
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      };
+
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      const parser = createParser(onParse);
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        parser.feed(chunkValue);
+      }
     } catch (error) {
       if (error.response && error.response.status === 429) {
         console.log('Rate limit exceeded. Please wait and try again.');
