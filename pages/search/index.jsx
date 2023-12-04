@@ -4,12 +4,12 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Navigation } from 'lucide-react';
-import { LocateFixed, MapPin } from 'lucide-react';
+import { LocateFixed, MapPin, MapPinOff } from 'lucide-react';
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 import { useState, useRef } from 'react';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { toast } from 'react-hot-toast';
-import { CarFront } from 'lucide-react';
+import { CarFront, Search } from 'lucide-react';
 import { useStore } from '@/contexts/map-context';
 
 const libraries = ['places'];
@@ -146,9 +146,17 @@ const SearchLocation = () => {
       ) : (
         <div className="flex w-full justify-center mt-8">
           <p className="text-center text-lg font-semibold text-zinc-500">
-            {noRouteFound
-              ? 'No feasible route was found'
-              : 'No routes to display'}
+            {noRouteFound ? (
+              <span className="flex items-center gap-2">
+                <Search size={24} />
+                <span>No feasible route was found</span>
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <MapPinOff size={24} />
+                <span>No routes to display</span>
+              </span>
+            )}
           </p>
         </div>
       )}

@@ -2,12 +2,6 @@
 import BackNavigator from '@/components/utils/back-navigator';
 import { Form } from '@/components/core/form';
 
-export const socialIcons = [
-  'https://img.icons8.com/fluency/48/facebook-new.png',
-  'https://img.icons8.com/color/48/google-logo.png',
-  'https://img.icons8.com/fluency/48/instagram-new.png',
-];
-
 const Register = () => {
   return (
     <>
@@ -20,15 +14,6 @@ const Register = () => {
           </p>
         </div>
         <Form type="register" />
-      </div>
-      <div className="my-14 items-center flex gap-2 w-full justify-center">
-        {socialIcons.map((item, index) => {
-          return (
-            <div key={index}>
-              <img className="w-10 h-10" src={item} alt="social-icons" />
-            </div>
-          );
-        })}
       </div>
     </>
   );

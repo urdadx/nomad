@@ -2,7 +2,6 @@
 import BackNavigator from '@/components/utils/back-navigator';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import BottomNavigator from '@/components/shared/bottom-navigator';
 import Link from 'next/link';
 
 const UpdateProfile = () => {

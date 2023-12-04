@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import BackNavigator from '@/components/utils/back-navigator';
-import { socialIcons } from '../register';
 import { Form } from '@/components/core/form';
 
 const Login = () => {
@@ -15,15 +14,6 @@ const Login = () => {
           </p>
         </div>
         <Form type="login" />
-      </div>
-      <div className="my-14 items-center flex gap-2 w-full justify-center">
-        {socialIcons.map((item, index) => {
-          return (
-            <div key={index}>
-              <img className="w-10 h-10" src={item} alt="social-icons" />
-            </div>
-          );
-        })}
       </div>
     </>
   );

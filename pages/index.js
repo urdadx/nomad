@@ -3,7 +3,6 @@ import Navbar from '@/components/shared/navbar';
 import { RoughNotation } from 'react-rough-notation';
 import Link from 'next/link';
 import SlidingCarousel from '@/components/utils/sliding-carousel';
-import BottomNavigator from '@/components/shared/bottom-navigator';
 
 const Home = () => {
   return (
@@ -81,7 +80,6 @@ const Home = () => {
           <div className="h-[100px]" />
         </div>
       </section>
-      {/* <BottomNavigator /> */}
     </>
   );
 };

@@ -7,12 +7,11 @@ import { locations } from '@/lib/stock-img-locations';
 export const Package = ({ data }) => {
   const getRandomStarRating = () => {
     // Generate a random number between 1 and 5
-    const randomRating = Math.random() * 4 + 1; // Math.random() returns a number between 0 and 1
+    const randomRating = Math.random() * 4 + 1;
 
     // Round the rating to one decimal place
     const roundedRating = parseFloat(randomRating.toFixed(1));
 
-    // Add ".0" to single-digit ratings
     const formattedRating =
       roundedRating % 1 === 0 ? `${roundedRating}.0` : roundedRating;
 
@@ -27,6 +26,7 @@ export const Package = ({ data }) => {
           <img
             src={data.image}
             alt="image-location"
+            loading="lazy"
             className="object-cover w-full h-full rounded-xl"
           />
         </div>
