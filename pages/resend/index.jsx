@@ -19,6 +19,7 @@ const Resend = () => {
         user_id: email,
       });
       toast.success('Verification link sent successfully');
+      setEmail('');
     } catch (error) {
       toast.error('Error resending verification link', error);
       setIsLoading(false);
