@@ -8,7 +8,7 @@ const CreateSchedule = () => {
   return (
     <>
       <BackNavigator name="Add Schedule" pen={true} />
-      <div className="px-6 h-full no-scrollbar mt-8">
+      <div className="px-6 h-screen no-scrollbar mt-8">
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="name">Name</Label>
           <Input
@@ -17,6 +17,10 @@ const CreateSchedule = () => {
             id="name"
             placeholder="Name"
           />
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-2 mb-6">
+          <Label htmlFor="">Pick a date</Label>
+          <DatePicker />
         </div>
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="location">Location</Label>
@@ -30,10 +34,6 @@ const CreateSchedule = () => {
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="location">Thumbnail</Label>
           <Input className="rounded-lg h-12" type="file" id="file" />
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-2 mb-6">
-          <Label htmlFor="">Pick a date</Label>
-          <DatePicker />
         </div>
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Button className="w-full h-12 text-md bg-primary hover:bg-orange-400">

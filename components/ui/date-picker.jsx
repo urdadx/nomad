@@ -1,5 +1,3 @@
-'use client';
-
 import { addDays, format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -30,7 +28,7 @@ export function DatePicker({ className }) {
             id="date"
             variant={'outline'}
             className={cn(
-              'w-[300px] justify-start text-left font-normal',
+              'w-full h-12 justify-start text-left font-normal',
               !date && 'text-muted-foreground'
             )}
           >
