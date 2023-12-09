@@ -1,5 +1,13 @@
-import { Bookmark, Phone, Pen, ChevronLeft, BellDot } from 'lucide-react';
+import {
+  PlusCircle,
+  Bookmark,
+  Phone,
+  Pen,
+  ChevronLeft,
+  BellDot,
+} from 'lucide-react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const BackNavigator = ({
   name,
@@ -9,6 +17,7 @@ const BackNavigator = ({
   isTransparent,
   bookmark,
   isBlack,
+  addButton,
   pen,
 }) => {
   const { back } = useRouter();
@@ -84,20 +93,36 @@ const BackNavigator = ({
           </div>
         )}
         {pen && (
-          <div
-            onClick={back}
-            className={`${
-              isTransparent
-                ? 'bg-transparent'
-                : 'cursor-pointer w-fit h-auto p-3 flex start bg-gray-100 rounded-full'
-            }`}
-          >
-            <Pen
-              className={`${isTransparent && 'font-extrabold text-primary'}`}
-              size={20}
-              color="orange"
-            />
-          </div>
+          <Link href="/create-schedule">
+            <div
+              className={`${
+                isTransparent
+                  ? 'bg-transparent bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl p-2 w-fit h-auto rounded-full'
+                  : 'cursor-pointer w-fit h-auto p-3 flex start bg-gray-100 rounded-full'
+              }`}
+            >
+              <Pen
+                className={`${isTransparent && 'font-extrabold text-primary'}`}
+                size={20}
+              />
+            </div>
+          </Link>
+        )}
+        {addButton && (
+          <Link href="/create-schedule">
+            <div
+              className={`${
+                isTransparent
+                  ? 'bg-transparent bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl p-2 w-fit h-auto rounded-full'
+                  : 'cursor-pointer w-fit h-auto p-3 flex start bg-gray-100 rounded-full'
+              }`}
+            >
+              <PlusCircle
+                className={`${isTransparent && 'font-extrabold text-primary'}`}
+                size={20}
+              />
+            </div>
+          </Link>
         )}
       </div>
     </>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 const BottomNavigator = () => {
   return (
     <div className="max-w-[400px]">
-      <div className="fixed  mx-auto lg:w-[400px] inset-x-0 bottom-0 bg-white shadow-md border-t">
+      <div className="fixed mx-auto lg:w-[400px] inset-x-0 bottom-0 bg-white shadow-md border-t">
         <div className="flex justify-between max-w-md mx-auto p-4">
           <Link href="/" className="flex flex-col items-center">
             <Home className="h-6 w-6" />

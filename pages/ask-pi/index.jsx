@@ -1,93 +1,105 @@
 import BackNavigator from '@/components/utils/back-navigator';
-import { useState } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Mic, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import toast from 'react-hot-toast';
-import { createParser } from 'eventsource-parser';
+import { nanoid } from 'nanoid';
 
 const AskPi = () => {
-  const [input, setInput] = useState('');
-  const [chatLog, setChatLog] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [messageList, setMessageList] = useState([]);
+  const isLoadingRef = useRef(isLoading);
+  const messageListRef = useRef(messageList);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const [input, setInput] = useState('');
 
-    setChatLog((prevChatLog) => [
-      ...prevChatLog,
-      { type: 'user', message: input },
-    ]);
-    sendMessage(input);
-    setInput('');
-  };
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
 
-  const sendMessage = async (message) => {
+  useEffect(() => {
+    messageListRef.current = messageList;
+  }, [messageList]);
+
+  const appendUserMessage = useCallback(async (content) => {
+    // Prevent multiple requests at once
+    if (isLoadingRef.current) return;
+
+    const userMsg =
+      typeof content === 'string'
+        ? { id: nanoid(10), role: 'user', content }
+        : content;
+    const assMsg = {
+      id: nanoid(10),
+      role: 'assistant',
+      content: '',
+    };
+    const messageListSnapshot = messageListRef.current;
+
+    // Reset output
     setIsLoading(true);
+
     try {
-      const response = await fetch('/api/generate', {
+      // Set user input immediately
+      setMessageList([...messageListSnapshot, userMsg]);
+
+      // If streaming, we need to use fetchEventSource directly
+      const response = await fetch(`/api/generate`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
-          prompt: message,
+          messages: [...messageListSnapshot, userMsg].map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
         }),
+        headers: { 'Content-Type': 'application/json' },
       });
-
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-
       // This data is a ReadableStream
       const data = response.body;
       if (!data) {
         return;
       }
 
-      const onParse = (event) => {
-        if (event.type === 'event') {
-          const data = event.data;
-          try {
-            const text = JSON.parse(data).text ?? '';
-            setChatLog((prevChatLog) => [
-              ...prevChatLog,
-              {
-                type: 'bot',
-                message: text,
-              },
-            ]);
-            console.log(text);
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      };
-
       const reader = data.getReader();
       const decoder = new TextDecoder();
-      const parser = createParser(onParse);
       let done = false;
+      let accumulatedValue = '';
 
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
         const chunkValue = decoder.decode(value);
-        parser.feed(chunkValue);
+        accumulatedValue += chunkValue; // Accumulate the chunk value
+
+        // Check if the accumulated value contains the delimiter
+        const delimiter = '\n';
+        const chunks = accumulatedValue.split(delimiter);
+
+        // Process all chunks except the last one (which may be incomplete)
+        while (chunks.length > 1) {
+          const chunkToDispatch = chunks.shift(); // Get the first chunk
+          if (chunkToDispatch && chunkToDispatch.length > 0) {
+            const chunk = JSON.parse(chunkToDispatch);
+            assMsg.content += chunk;
+            setMessageList([...messageListSnapshot, userMsg, assMsg]);
+          }
+        }
+
+        // The last chunk may be incomplete, so keep it in the accumulated value
+        accumulatedValue = chunks[0];
       }
-    } catch (error) {
-      if (error.response && error.response.status === 429) {
-        console.log('Rate limit exceeded. Please wait and try again.');
-        toast.error('Rate limit exceeded.');
-      } else {
-        console.error(error);
+
+      // Process any remaining accumulated value after the loop is done
+      if (accumulatedValue.length > 0) {
+        assMsg.content += accumulatedValue;
+        setMessageList([...messageListSnapshot, userMsg, assMsg]);
       }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const inputLength = input.trim().length;
   return (
@@ -104,24 +116,25 @@ const AskPi = () => {
                 'flex w-max bg-blue-100 max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm'
               )}
             >
-              Hi, How can I help you today?
+              Hey, How can I help you?
             </div>
-            {chatLog.map((message, index) => (
+
+            {messageList.map((message, index) => (
               <div
                 key={index}
                 className={cn(
                   'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
-                  message.type === 'user'
+                  message.role === 'user'
                     ? 'ml-auto bg-primary text-primary-foreground'
                     : 'bg-blue-100'
                 )}
               >
-                {message.message}
+                {message.content}
               </div>
             ))}
             {isLoading && (
-              <div className="flex w-max max-w-[75%] items-center flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-muted">
-                🤖 AI is thinking...
+              <div className="flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-blue-100">
+                AI is thinking🤖
               </div>
             )}
             <div className="h-[40px]" />
@@ -130,7 +143,11 @@ const AskPi = () => {
 
         <div className="px-4 bg-white lg:w-[400px] mx-auto fixed inset-x-0 bottom-2 lg:bottom-0 sm:pb-2 lg:pb-4 border-x border-t pt-4 z-50">
           <form
-            onSubmit={handleSubmit}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setInput('');
+              await appendUserMessage(input);
+            }}
             className="flex w-full items-center space-x-2"
           >
             <Input

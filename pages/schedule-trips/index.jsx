@@ -3,7 +3,6 @@ import BackNavigator from '@/components/utils/back-navigator';
 import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
 import { MapPin, CalendarDays } from 'lucide-react';
-import BottomNavigator from '@/components/shared/bottom-navigator';
 import { locations } from '@/lib/stock-img-locations';
 
 export const Trip = ({ data }) => {
@@ -39,7 +38,7 @@ const ScheduleTrips = () => {
   const [date, setDate] = useState(new Date());
   return (
     <>
-      <BackNavigator name="Schedule" showNotification={true} />
+      <BackNavigator name="Schedule" addButton={true} />
       <div className="container my-6 flex justify-center ">
         <Calendar
           mode="single"

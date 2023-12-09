@@ -18,7 +18,7 @@ const LocationDetail = () => {
           />
         </div>
       </div>
-      <div className="w-full h-full mb-6">
+      <div className="w-full h-screen mb-6">
         <div className="px-4 my-6 flex items-center justify-between">
           <div className="flex flex-col">
             <h2 className="font-semibold text-lg">Black Star Square</h2>
@@ -79,9 +79,7 @@ const LocationDetail = () => {
               visit of Queen Elizabeth II, it was constructed in 1961 and so far
               it has been used for all major national public gatherings and
               national festivals, in addition to the most important event which
-              is the parade for Ghana&apos;s Independence Day. Due to the
-              immense size of the square, which is one of the biggest ones in
-              the world, it boasts also the Independence Arch
+              is the parade for Ghana&apos;s Independence Day.
             </ReactReadMoreReadLess>
           </p>
         </div>

@@ -9,7 +9,6 @@ import {
   Settings,
   History,
 } from 'lucide-react';
-import BottomNavigator from '@/components/shared/bottom-navigator';
 
 const Profile = () => {
   const navigators = [
@@ -56,34 +55,6 @@ const Profile = () => {
           <small className="text-center text-gray-500">
             imanefh28@gmail.com
           </small>
-        </div>
-      </div>
-      <div className="px-4">
-        <div className=" w-full h-20 p-2 grid grid-cols-3 rounded-xl border bg-card text-card-foreground shadow-sm">
-          <div className="flex flex-col border-r p-2">
-            <small className="font-semibold text-md text-center">
-              Reward Points
-            </small>
-            <small className="flex justify-center text-primary font-semibold text-lg">
-              50
-            </small>
-          </div>
-          <div className="flex flex-col border-r p-2">
-            <small className="font-semibold text-md text-center">
-              Travel Trips
-            </small>
-            <small className="flex justify-center text-primary font-semibold text-lg">
-              30
-            </small>
-          </div>
-          <div className="flex flex-col p-2">
-            <small className="font-semibold text-md text-center">
-              Bucket List
-            </small>
-            <small className="flex justify-center text-primary font-semibold text-lg">
-              200
-            </small>
-          </div>
         </div>
       </div>
       <div className="px-4 no-scrollbar">

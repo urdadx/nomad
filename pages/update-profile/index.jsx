@@ -3,6 +3,7 @@ import BackNavigator from '@/components/utils/back-navigator';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const UpdateProfile = () => {
   return (
@@ -61,6 +62,11 @@ const UpdateProfile = () => {
             id="phone"
             placeholder="Phone Number"
           />
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-2 mb-6">
+          <Button className="w-full h-12 text-md bg-primary hover:bg-orange-400">
+            Update Profile
+          </Button>
         </div>
       </div>
       <div className="h-[100px]" />
