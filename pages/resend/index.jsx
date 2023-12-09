@@ -2,10 +2,17 @@ import { Button } from '@/components/ui/button';
 import BackNavigator from '@/components/utils/back-navigator';
 import { API_URL } from '@/lib/constants';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const ResendVerfication = () => {
-  const handleResendEmail = () => {
-    axios.post(`${API_URL}/resend`);
+  const handleResendEmail = async () => {
+    try {
+      await axios.post(`${API_URL}/resend`);
+
+      toast.success('Email verification link resent successfully');
+    } catch (error) {
+      toast.error('Error resending email verification link', error);
+    }
   };
 
   return (
