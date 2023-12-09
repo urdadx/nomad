@@ -17,7 +17,7 @@ const ResendVerfication = () => {
 
   return (
     <>
-      <BackNavigator />
+      <BackNavigator name="Email verification" showNotification={true} />
       <section className="h-full w-full justify-center ">
         <div className="mt-24">
           <h2 className="text-center font-semibold text-xl">

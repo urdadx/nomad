@@ -69,8 +69,6 @@ const SlidingCarousel = () => {
     );
   }, []);
 
-  console.log(coordinates);
-
   // useEffect(() => {
   //   getPlacesData().then((data) => {
   //     console.log(data);
@@ -97,7 +95,6 @@ const SlidingCarousel = () => {
     setFilteredPlaces(updatedFilteredPlaces);
   }, [places, rating]);
 
-  console.log(places);
   return (
     <div className="">
       <motion.div
