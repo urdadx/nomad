@@ -15,7 +15,6 @@ import Avatar from 'boring-avatars';
 
 const Navbar = () => {
   const { status } = useSession();
-  const { data: currentUser } = useCurrentUser();
   const [drawerOpen] = useState(false);
   const router = useRouter();
 
@@ -46,7 +45,7 @@ const Navbar = () => {
           </span>
           <h2 className="font-semibold text-xl">Nomad</h2>
         </div>
-        {status === 'authenticated' ? (
+        {/* {status === 'authenticated' ? (
           <ToolTipWrapper
             triggerElement={
               <Drawer.Root shouldScaleBackground>
@@ -101,16 +100,15 @@ const Navbar = () => {
             }
             message={currentUser?.name}
           />
-        ) : (
-          <Link href="/login">
-            <Button
-              className="rounded-2xl px-10 py-6 text-md font-semibold"
-              variant="secondary"
-            >
-              Sign In!
-            </Button>
-          </Link>
-        )}
+        ) : ( */}
+        <Link href="/login">
+          <Button
+            className="rounded-2xl px-10 py-6 text-md font-semibold"
+            variant="secondary"
+          >
+            Sign In!
+          </Button>
+        </Link>
       </header>
     </>
   );

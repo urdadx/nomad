@@ -4,7 +4,7 @@ import { API_URL } from '@/lib/constants';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const ResendVerfication = () => {
+const Resend = () => {
   const handleResendEmail = async () => {
     try {
       await axios.post(`${API_URL}/resend`);
@@ -43,4 +43,4 @@ const ResendVerfication = () => {
   );
 };
 
-export default ResendVerfication;
+export default Resend;
