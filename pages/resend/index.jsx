@@ -1,7 +1,13 @@
 import { Button } from '@/components/ui/button';
 import BackNavigator from '@/components/utils/back-navigator';
+import { API_URL } from '@/lib/constants';
+import axios from 'axios';
 
 const ResendVerfication = () => {
+  const handleResendEmail = () => {
+    axios.post(`${API_URL}/resend`);
+  };
+
   return (
     <>
       <BackNavigator />
@@ -17,7 +23,10 @@ const ResendVerfication = () => {
             </p>
           </div>
           <div className="flex justify-center">
-            <Button className="bg-slate-950 rounded-xl h-12 hover:bg-slate-700">
+            <Button
+              onClick={handleResendEmail}
+              className="bg-slate-950 rounded-xl h-12 hover:bg-slate-700"
+            >
               Resend email verification link
             </Button>
           </div>
