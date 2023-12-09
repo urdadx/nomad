@@ -64,7 +64,7 @@ export const Package = ({ data }) => {
 const TripPackages = () => {
   return (
     <>
-      <BackNavigator name="Popular Packages" showNotification={true} />
+      <BackNavigator name="Popular Packages" addButton={true} />
       <div className="my-10 px-4">
         <h2 className="text-xl font-semibold text-slate-700">
           All Popular Trip Packages
