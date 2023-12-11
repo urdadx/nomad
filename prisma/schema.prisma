@@ -14,12 +14,44 @@ model User {
   email    String  
   image    String?
   password String?
+  phone    String?
   emailVerified  DateTime?
-
+  role          String
   Account Account[]
-
+  sessions       Session[]
+  schedules      Schedules[]
+  tripPackages   TripPackages[]
   @@unique([email])
 }
+
+
+model Schedules {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  scheduleDate Json?  
+  location     String
+  image        String    @default("https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/64/external-map-logistic-delivery-kiranshastry-lineal-color-kiranshastry.png")
+  userId       String     @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index(userId)
+
+}
+
+
+model TripPackages {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  name       String?
+  tripdate   Json?
+  location   String
+  numSpots   Int
+  cost       Int
+  thumbnail  String     @default("https://img.icons8.com/external-filled-outline-lima-studio/64/external-holiday-daily-planner-filled-outline-lima-studio.png") 
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index(userId)
+
+}
+
 
 model Account {
   id                 String  @id @default(cuid()) @map("_id")
@@ -40,4 +72,14 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String  @id @default(cuid()) @map("_id")
+  sessionToken String  @unique
+  userId       String  @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

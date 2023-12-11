@@ -18,6 +18,7 @@ const BackNavigator = ({
   bookmark,
   isBlack,
   addButton,
+  addButton2,
   pen,
 }) => {
   const { back } = useRouter();
@@ -110,6 +111,22 @@ const BackNavigator = ({
         )}
         {addButton && (
           <Link href="/create-schedule">
+            <div
+              className={`${
+                isTransparent
+                  ? 'bg-transparent bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl p-2 w-fit h-auto rounded-full'
+                  : 'cursor-pointer w-fit h-auto p-3 flex start bg-gray-100 rounded-full'
+              }`}
+            >
+              <PlusCircle
+                className={`${isTransparent && 'font-extrabold text-primary'}`}
+                size={20}
+              />
+            </div>
+          </Link>
+        )}
+        {addButton2 && (
+          <Link href="/add-package">
             <div
               className={`${
                 isTransparent

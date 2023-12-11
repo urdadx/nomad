@@ -3,6 +3,7 @@ import Navbar from '@/components/shared/navbar';
 import { RoughNotation } from 'react-rough-notation';
 import Link from 'next/link';
 import SlidingCarousel from '@/components/utils/sliding-carousel';
+import Attractions from '@/components/core/attractions';
 
 const Home = () => {
   return (
@@ -33,7 +34,7 @@ const Home = () => {
         <div className="mb-3">
           <div className="px-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-slate-900">
-              Best Destination
+              Best Destinations
             </h2>
             <Link
               className="text-primary hover:text-orange-600"
@@ -43,8 +44,8 @@ const Home = () => {
             </Link>
           </div>
         </div>
-        <div className="no-scrollbar">
-          <SlidingCarousel />
+        <div className="no-scrollbar px-4">
+          <Attractions />
         </div>
         <div className="mt-8">
           <div className="px-4 flex items-center justify-between">

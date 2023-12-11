@@ -10,7 +10,7 @@ import {
 } from '@react-google-maps/api';
 import { Rings } from 'react-loader-spinner';
 import { useRouter } from 'next/router';
-import { useStore } from '@/contexts/map-context';
+import { useStore } from '@/contexts/context';
 import useMediaQuery from '@/hooks/use-media-query';
 
 const libraries = ['places'];

@@ -1,10 +1,10 @@
 import '@/styles/globals.css';
 import { Toaster } from 'react-hot-toast';
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import MobileLayout from '@/components/layout/mobile-layout';
-import { StoreProvider } from '@/contexts/map-context';
+import { StoreProvider } from '@/contexts/context';
 import { SessionProvider } from 'next-auth/react';
 
 export default function App({ Component, pageProps }) {
@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }) {
             </MobileLayout>
           </StoreProvider>
         </SessionProvider>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );

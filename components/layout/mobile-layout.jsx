@@ -10,6 +10,7 @@ const MobileLayout = ({ children }) => {
         {router.pathname === '/ask-pi' ||
         router.pathname === '/login' ||
         router.pathname === '/resend' ||
+        router.pathname === '/' ||
         router.pathname === '/register' ||
         router.pathname === '/maps-direction' ? (
           ''

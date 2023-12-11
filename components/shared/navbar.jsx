@@ -15,6 +15,7 @@ import Avatar from 'boring-avatars';
 
 const Navbar = () => {
   const { status } = useSession();
+  const { data: currentUser } = useCurrentUser();
   const [drawerOpen] = useState(false);
   const router = useRouter();
 
@@ -45,33 +46,33 @@ const Navbar = () => {
           </span>
           <h2 className="font-semibold text-xl">Nomad</h2>
         </div>
-        {/* {status === 'authenticated' ? (
+        {status === 'authenticated' ? (
           <ToolTipWrapper
             triggerElement={
               <Drawer.Root shouldScaleBackground>
                 <Drawer.Trigger>
-                  <div className="w-[37px] h-[37px] cursor-pointer border-2 border-primary rounded-full">
-                    {currentUser?.image ? (
+                  {currentUser?.image ? (
+                    <div className="w-[37px] h-[37px] cursor-pointer border-2 border-primary rounded-full">
                       <img
                         className="w-full h-full rounded-full"
                         alt="profile-pic"
                         src={currentUser?.image}
                       />
-                    ) : (
-                      <Avatar
-                        size={40}
-                        name={currentUser?.name}
-                        variant="marble"
-                        colors={[
-                          '#92A1C6',
-                          '#146A7C',
-                          '#F0AB3D',
-                          '#C271B4',
-                          '#C20D90',
-                        ]}
-                      />
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <Avatar
+                      size={40}
+                      name={currentUser?.name}
+                      variant="marble"
+                      colors={[
+                        '#92A1C6',
+                        '#146A7C',
+                        '#F0AB3D',
+                        '#C271B4',
+                        '#C20D90',
+                      ]}
+                    />
+                  )}
                 </Drawer.Trigger>
                 <Drawer.Portal>
                   {isMobile && (
@@ -100,15 +101,16 @@ const Navbar = () => {
             }
             message={currentUser?.name}
           />
-        ) : ( */}
-        <Link href="/login">
-          <Button
-            className="rounded-2xl px-10 py-6 text-md font-semibold"
-            variant="secondary"
-          >
-            Sign In!
-          </Button>
-        </Link>
+        ) : (
+          <Link href="/login">
+            <Button
+              className="rounded-2xl px-10 py-6 text-md font-semibold"
+              variant="secondary"
+            >
+              Sign In!
+            </Button>
+          </Link>
+        )}
       </header>
     </>
   );

@@ -1,7 +1,5 @@
-import { addDays, format } from 'date-fns';
+import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
-
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -10,15 +8,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useStore } from '@/contexts/context';
 
-export function DatePicker({ className }) {
-  const [date, setDate] = useState(
-    undefined >
-      {
-        from: new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
-      }
-  );
+export const DateRangePicker = ({ className }) => {
+  const { scheduleDate, setScheduleDate } = useStore();
 
   return (
     <div className={cn('grid gap-2', className)}>
@@ -29,18 +22,18 @@ export function DatePicker({ className }) {
             variant={'outline'}
             className={cn(
               'w-full h-12 justify-start text-left font-normal',
-              !date && 'text-muted-foreground'
+              !scheduleDate && 'text-muted-foreground'
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
+            {scheduleDate?.from ? (
+              scheduleDate.to ? (
                 <>
-                  {format(date.from, 'LLL dd, y')} -{' '}
-                  {format(date.to, 'LLL dd, y')}
+                  {format(scheduleDate.from, 'LLL dd, y')} -{' '}
+                  {format(scheduleDate.to, 'LLL dd, y')}
                 </>
               ) : (
-                format(date.from, 'LLL dd, y')
+                format(scheduleDate.from, 'LLL dd, y')
               )
             ) : (
               <span>Pick a date</span>
@@ -51,13 +44,42 @@ export function DatePicker({ className }) {
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
+            defaultMonth={scheduleDate?.from}
+            selected={scheduleDate}
+            onSelect={setScheduleDate}
             numberOfMonths={2}
           />
         </PopoverContent>
       </Popover>
     </div>
   );
-}
+};
+
+export const DatePicker = () => {
+  const { tripdate, setTripDate } = useStore();
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={'outline'}
+          className={cn(
+            'w-full h-12 justify-start text-left font-normal',
+            !tripdate && 'text-muted-foreground'
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {tripdate ? format(tripdate, 'PPP') : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={tripdate}
+          onSelect={setTripDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};

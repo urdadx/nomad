@@ -1,27 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import BackNavigator from '@/components/utils/back-navigator';
 import { CalendarDays } from 'lucide-react';
-import StarSVG from '@/components/utils/star-svg';
 import { locations } from '@/lib/stock-img-locations';
 
 export const Package = ({ data }) => {
-  const getRandomStarRating = () => {
-    // Generate a random number between 1 and 5
-    const randomRating = Math.random() * 4 + 1;
-
-    // Round the rating to one decimal place
-    const roundedRating = parseFloat(randomRating.toFixed(1));
-
-    const formattedRating =
-      roundedRating % 1 === 0 ? `${roundedRating}.0` : roundedRating;
-
-    return formattedRating;
-  };
-
-  const randomRating = getRandomStarRating();
   return (
     <>
-      <div className="w-full mb-4 p-2 h-[125px] flex gap-x-4 rounded-xl border bg-card text-card-foreground shadow-sm">
+      <div className="w-full cursor-pointer mb-4 p-2 h-[125px] flex gap-x-4 rounded-xl border bg-card text-card-foreground shadow-sm">
         <div className="w-[120px] h-full">
           <img
             src={data.image}
@@ -39,13 +24,8 @@ export const Package = ({ data }) => {
             </div>
             <div className="flex gap-2 items-center pt-1">
               <div className="flex">
-                {Array.from({
-                  length: Math.floor(Math.random() * (4 - 2 + 1)) + 2,
-                }).map((_, index) => (
-                  <StarSVG key={index} />
-                ))}
+                <small className="text-md">24 spots left</small>
               </div>
-              <small>{randomRating}</small>
             </div>
             <div className="pt-1">
               <div className="p-1 px-2 w-fit h-auto bg-primary rounded-lg">
@@ -64,7 +44,7 @@ export const Package = ({ data }) => {
 const TripPackages = () => {
   return (
     <>
-      <BackNavigator name="Popular Packages" addButton={true} />
+      <BackNavigator name="Popular Packages" addButton2={true} />
       <div className="my-10 px-4">
         <h2 className="text-xl font-semibold text-slate-700">
           All Popular Trip Packages

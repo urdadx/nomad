@@ -1,77 +1,50 @@
-import { db } from '@/lib/db';
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcrypt';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import GoogleProvider from 'next-auth/providers/google';
+import { db } from '@/lib/db';
+import NextAuth from 'next-auth/next';
 
 export const authOptions = {
-  adapter: PrismaAdapter(db),
   session: {
     strategy: 'jwt',
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    newUser: '/home',
+    signIn: '/home',
+    error: '/login',
+  },
+  adapter: PrismaAdapter(db),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    CredentialsProvider({
-      credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
-      },
-      async authorize(credentials) {
-        const { email, password } = credentials ?? {};
-        if (!email || !password) {
-          throw new Error('Missing username or password');
-        }
+      allowDangerousEmailAccountLinking: true,
 
-        const user = await db.user.findFirst({
-          where: {
-            email: email,
-          },
-        });
-
-        // if user doesn't exist or password doesn't match
-        if (!user || !(await compare(password, user.password))) {
-          throw new Error('Invalid username or password');
-        }
-
-        return user;
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: `${profile.given_name} ${profile.family_name}`,
+          email: profile.email,
+          image: profile.picture,
+          role: profile.role ? profile.role : 'user',
+        };
       },
     }),
   ],
+
   callbacks: {
-    async session({ token, session }) {
-      if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.name = token.name;
-      }
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user.role = token.role;
+      session.user.name = token.name;
+      session.user.image = token.image;
+      session.user.email = token.email;
       return session;
     },
-
-    async jwt({ token, user }) {
-      const dbUser = await db.user.findFirst({
-        where: {
-          email: token.email,
-        },
-      });
-
-      if (!dbUser) {
-        token.id = user.id;
-        return token;
-      }
-
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        name: dbUser.name,
-      };
-    },
+  },
+  redirect() {
+    return '/home';
   },
 };
 

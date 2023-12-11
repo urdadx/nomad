@@ -1,74 +1,34 @@
-import { useState } from 'react';
+/* eslint-disable @next/next/no-img-element */
 import LoadingDots from '../utils/loading-dots/loading-dots';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import { Input } from '../ui/input';
 import { useRouter } from 'next/navigation';
-import { API_URL } from '@/lib/constants';
 import { toast } from 'react-hot-toast';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 export const Form = ({ type }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams?.get('next');
+
+  useEffect(() => {
+    const error = searchParams?.get('error');
+    error && toast.error(error);
+  }, [searchParams]);
+
+  const [email, setEmail] = useState('');
 
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault();
         setLoading(true);
-        if (type === 'login') {
-          fetch(`${API_URL}/registered_users`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_id: e.currentTarget.email.value,
-              email: e.currentTarget.email.value,
-              password: e.currentTarget.password.value,
-            }),
-          }).then(async (res) => {
-            setLoading(false);
-            if (res.status === 409) {
-              toast.success('Login successful');
-              setTimeout(() => {
-                router.push('/');
-              }, 1200);
-            } else {
-              toast.error("You don't have an account");
-              setTimeout(() => {
-                router.push('/register');
-              }, 1200);
-            }
-          });
-        } else {
-          fetch(`${API_URL}/registered_users`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_id: e.currentTarget.email.value,
-              username: e.currentTarget.username.value,
-              email: e.currentTarget.email.value,
-              password: e.currentTarget.password.value,
-            }),
-          }).then(async (res) => {
-            setLoading(false);
-            if (res.status === 201) {
-              toast.success('Account created! ');
-              setTimeout(() => {
-                router.push('/home');
-              }, 1200);
-            } else {
-              if (res.status === 409) {
-                toast.error('You already have an account');
-              } else {
-                toast.error('An error occured');
-              }
-            }
-          });
-        }
+        e.preventDefault();
+        signIn('email', { email, redirect: false });
+        setLoading(false);
       }}
       className="px-4 my-8"
     >
@@ -82,6 +42,8 @@ export const Form = ({ type }) => {
           />
         )}
         <Input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           name="email"
           className="rounded-lg h-12 text-md"
           type="text"
@@ -128,6 +90,25 @@ export const Form = ({ type }) => {
           </strong>
         </p>
       )}
+      <Button
+        onClick={() => {
+          setLoading(true);
+          signIn('google', {
+            ...(next && next.length > 0 ? { callbackUrl: next } : {}),
+          });
+        }}
+        className="bg-transparent rounded-lg my-10 gap-2 w-full flex justify-center cursor-pointer hover:bg-gray-100 h-12"
+      >
+        <div className="flex items-center gap-2">
+          <img
+            className="w-6 h-6"
+            src="https://img.icons8.com/color/48/google-logo.png"
+            alt="social-icons"
+            loading="lazy"
+          />
+          <p className="text-gray-600 font-semibold">Continue with Google</p>
+        </div>
+      </Button>
     </form>
   );
 };

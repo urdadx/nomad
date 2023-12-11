@@ -5,10 +5,12 @@ import {
   CircleUserRound,
   ChevronRight,
   Heart,
-  Globe2,
+  LogOut,
   Settings,
   History,
 } from 'lucide-react';
+import useCurrentUser from '@/hooks/use-current-user';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Profile = () => {
   const navigators = [
@@ -22,44 +24,46 @@ const Profile = () => {
       icon: <Heart color="grey" />,
       link: '/favorite-places',
     },
-    {
-      name: 'Previous Trips',
-      icon: <Globe2 color="grey" />,
-      link: '/previous-trips',
-    },
+
     {
       name: 'Settings',
       icon: <Settings color="grey" />,
       link: '/settings',
     },
     {
-      name: 'Version',
-      icon: <History color="grey" />,
-      link: '/versions',
+      name: 'Sign out',
+      icon: <LogOut color="grey" />,
+      link: '#',
     },
   ];
+
+  const { data: currentUser } = useCurrentUser();
 
   return (
     <>
       <BackNavigator name="Profile" showNotification={true} />
       <div className="my-6 flex justify-center">
-        <div className="block bg-contain">
-          <div className="rounded-full w-[120px] h-[120px] border-2 border-primary">
-            <img
+        <div className="bg-contain flex flex-col items-center">
+          <Avatar className="rounded-full w-[120px] h-[120px] border-2 border-primary">
+            <AvatarImage
               className="object-contain w-full h-full rounded-full"
-              src="https://avatars.githubusercontent.com/u/70736338?v=4"
-              alt="pfp"
+              src={currentUser?.image}
+              alt={`@${currentUser?.name}`}
             />
-          </div>
-          <h2 className="text-xl font-semibold text-center py-2">Imane fh</h2>
-          <small className="text-center text-gray-500">
-            imanefh28@gmail.com
+            <AvatarFallback>{currentUser?.name}</AvatarFallback>
+          </Avatar>
+          <h2 className="text-xl font-semibold text-center py-2">
+            {currentUser?.name}
+          </h2>
+          <small className="text-center text-primary">
+            {currentUser?.email}
           </small>
         </div>
       </div>
+
       <div className="px-4 no-scrollbar">
         <div className="my-4 p-2 border rounded-2xl w-full h-auto bg-card text-card-foreground shadow-sm">
-          <div className="grid grid-rows-5 ">
+          <div className="grid grid-rows-4 ">
             {navigators?.map((item, index) => {
               return (
                 <div key={index}>

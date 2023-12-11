@@ -10,7 +10,7 @@ import { useState, useRef } from 'react';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { toast } from 'react-hot-toast';
 import { CarFront, Search } from 'lucide-react';
-import { useStore } from '@/contexts/map-context';
+import { useStore } from '@/contexts/context';
 
 const libraries = ['places'];
 

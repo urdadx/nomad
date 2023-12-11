@@ -5,7 +5,7 @@ import { Form } from '@/components/core/form';
 const Login = () => {
   return (
     <>
-      <BackNavigator cancel={true} isBlack={true} />
+      <BackNavigator isBlack={true} />
       <div className="my-8">
         <div className="my-4">
           <h2 className="font-semibold text-center text-2xl">Sign in now</h2>
