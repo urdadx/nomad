@@ -10,7 +10,7 @@ export const authOptions = {
   },
   pages: {
     newUser: '/home',
-    signIn: '/login',
+    signIn: '/home',
     error: '/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
@@ -53,9 +53,6 @@ export const authOptions = {
       session.user.email = token.email;
       return session;
     },
-  },
-  redirect() {
-    return '/home';
   },
 };
 
