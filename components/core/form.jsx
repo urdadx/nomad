@@ -23,16 +23,16 @@ export const Form = ({ type }) => {
   const [email, setEmail] = useState('');
 
   return (
-    <div
-      // onSubmit={(e) => {
-      //   setLoading(true);
-      //   e.preventDefault();
-      //   signIn('email', { email, redirect: false });
-      //   setLoading(false);
-      // }}
+    <form
+      onSubmit={(e) => {
+        setLoading(true);
+        e.preventDefault();
+        signIn('email', { email, redirect: false });
+        setLoading(false);
+      }}
       className="px-4 my-8"
     >
-      {/* <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8">
         {type === 'register' && (
           <Input
             name="username"
@@ -40,7 +40,7 @@ export const Form = ({ type }) => {
             type="text"
             placeholder="Username"
           />
-        )} 
+        )}
         <Input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -49,14 +49,14 @@ export const Form = ({ type }) => {
           type="text"
           placeholder="Email"
         />
-       <Input
+        <Input
           name="password"
           className="rounded-lg h-12 text-md"
           type="password"
           placeholder="Password"
-        /> 
-      </div> */}
-      {/* 
+        />
+      </div>
+
       <div className="my-6 ">
         <Button
           disabled={loading}
@@ -74,8 +74,8 @@ export const Form = ({ type }) => {
             </p>
           )}
         </Button>
-      </div> */}
-      {/* {type === 'register' ? (
+      </div>
+      {type === 'register' ? (
         <p className="flex gap-2 items-center justify-center text-center my-6 ">
           <span className="text-gray-500"> Already have an account? </span>
           <strong>
@@ -89,7 +89,7 @@ export const Form = ({ type }) => {
             <Link href="/register">Sign up</Link>
           </strong>
         </p>
-      )} */}
+      )}
       <Button
         onClick={() => {
           setLoading(true);
@@ -109,6 +109,6 @@ export const Form = ({ type }) => {
           <p className="text-gray-600 font-semibold">Continue with Google</p>
         </div>
       </Button>
-    </div>
+    </form>
   );
 };
