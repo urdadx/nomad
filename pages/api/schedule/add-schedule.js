@@ -9,14 +9,16 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const { currentUser } = await serverAuth(req, res);
-      const { name, scheduleDate, location } = req.body;
+      const { name, scheduleDate, location, image, scheduleId } = req.body;
 
       const schedule = await db.schedules.create({
         data: {
           name,
           scheduleDate,
           location,
+          image,
           userId: currentUser.id,
+          scheduleId,
         },
       });
 

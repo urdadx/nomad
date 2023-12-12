@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useStore } from '@/contexts/context';
 import axios from 'axios';
 import useCurrentUser from '@/hooks/use-current-user';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
+import { nanoid } from 'nanoid';
 
 const AddTripPackage = () => {
   const queryClient = useQueryClient();
@@ -18,20 +19,52 @@ const AddTripPackage = () => {
   const [location, setLocation] = useState('');
   const [numSpots, setNumSpots] = useState(0);
   const [cost, setCost] = useState();
+  const [tripId, setTripId] = useState(nanoid(20));
   const { tripdate, setTripDate } = useStore();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const { currentUser } = useCurrentUser();
 
+  const fileInputRef = useRef(null);
+  const [bioImage, setBioImage] = useState('');
+
+  const onLoad = (fileString) => {
+    setBioImage(fileString);
+  };
+
+  const getBase64 = (file) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        onLoad(reader.result);
+      }
+    };
+  };
+
+  const handleFileSelect = (e) => {
+    setIsLoading(true);
+    const files = e.target.files;
+    const file = files && files[0];
+    if (file) {
+      getBase64(file);
+    }
+    setIsLoading(false);
+  };
+
+  const thumbnail = bioImage;
+
   const addTripPackage = useMutation(
-    async ({ name, tripdate, location, numSpots, cost }) => {
-      await axios.post('/api/add-package', {
+    async ({ name, tripdate, location, numSpots, cost, thumbnail, tripId }) => {
+      await axios.post('/api/packages/add-package', {
         name,
         tripdate,
         location,
         numSpots,
         cost,
+        thumbnail,
+        tripId,
       });
     },
     {
@@ -44,6 +77,7 @@ const AddTripPackage = () => {
         setTripDate('');
         setLocation('');
         setNumSpots(0);
+        setTripId('');
         setCost(0);
       },
     }
@@ -58,6 +92,8 @@ const AddTripPackage = () => {
         location,
         numSpots,
         cost,
+        thumbnail,
+        tripId,
       }),
       {
         loading: 'Creating package',
@@ -122,8 +158,15 @@ const AddTripPackage = () => {
           />
         </div>
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
-          <Label htmlFor="image">Thumbnail (Optional)</Label>
-          <Input className="rounded-lg h-12" type="file" id="file" />
+          <Label htmlFor="image">Thumbnail</Label>
+          <Input
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            className="rounded-lg h-12"
+            type="file"
+            id="file"
+          />
         </div>
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Button

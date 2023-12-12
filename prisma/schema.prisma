@@ -33,22 +33,28 @@ model Schedules {
   image        String    @default("https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/64/external-map-logistic-delivery-kiranshastry-lineal-color-kiranshastry.png")
   userId       String     @db.ObjectId
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scheduleId   String
   @@index(userId)
+  @@unique([scheduleId])
+
 
 }
 
 
 model TripPackages {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  name       String?
+  name       String
   tripdate   Json?
   location   String
   numSpots   Int
   cost       Int
+  tripId     String
   thumbnail  String     @default("https://img.icons8.com/external-filled-outline-lima-studio/64/external-holiday-daily-planner-filled-outline-lima-studio.png") 
   userId      String    @db.ObjectId
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index(userId)
+  @@unique([tripId])
+
 
 }
 

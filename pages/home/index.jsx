@@ -2,7 +2,7 @@
 import Navbar from '@/components/shared/navbar';
 import { RoughNotation } from 'react-rough-notation';
 import Link from 'next/link';
-import SlidingCarousel from '@/components/utils/sliding-carousel';
+import Packages from '@/components/utils/packages';
 import Attractions from '@/components/core/attractions';
 
 const Home = () => {
@@ -61,7 +61,7 @@ const Home = () => {
           </div>
         </div>
         <div className="my-4 no-scrollbar">
-          <SlidingCarousel />
+          <Packages />
         </div>
         <div className="container my-8">
           <h2 className="text-primary text-center font-semibold text-2xl">

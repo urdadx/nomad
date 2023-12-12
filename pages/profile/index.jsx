@@ -7,10 +7,12 @@ import {
   Heart,
   LogOut,
   Settings,
-  History,
 } from 'lucide-react';
 import useCurrentUser from '@/hooks/use-current-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { signOut } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 const Profile = () => {
   const navigators = [
@@ -28,7 +30,7 @@ const Profile = () => {
     {
       name: 'Settings',
       icon: <Settings color="grey" />,
-      link: '/settings',
+      link: '#',
     },
     {
       name: 'Sign out',
@@ -36,6 +38,18 @@ const Profile = () => {
       link: '#',
     },
   ];
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success('You logged out');
+    } catch (error) {
+      toast.error('An error occurred');
+    } finally {
+      router.push('/login');
+    }
+  };
 
   const { data: currentUser } = useCurrentUser();
 
@@ -67,7 +81,10 @@ const Profile = () => {
             {navigators?.map((item, index) => {
               return (
                 <div key={index}>
-                  <Link className="" href={item.link}>
+                  <Link
+                    onClick={item.name === 'Sign Out' && handleLogout}
+                    href={item.link}
+                  >
                     <div className="flex justify-between mb-2 p-4 cursor-pointer rounded-xl hover:bg-gray-100">
                       <div className="flex gap-2">
                         {item.icon}

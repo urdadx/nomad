@@ -1,41 +1,83 @@
 /* eslint-disable @next/next/no-img-element */
 import BackNavigator from '@/components/utils/back-navigator';
 import { Calendar } from '@/components/ui/calendar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapPin, CalendarDays } from 'lucide-react';
-import { locations } from '@/lib/stock-img-locations';
+import useSchedulesData from '@/hooks/use-schedules-data';
+import useCurrentUser from '@/hooks/use-current-user';
+import { Oval } from 'react-loader-spinner';
+import Link from 'next/link';
 
-export const Trip = ({ data }) => {
+export const Trip = ({ scheduleId, image, name, location, date }) => {
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [formattedDate, setFormattedDate] = useState(null);
+
+  const scheduleDate = date;
+
+  useEffect(() => {
+    setFromDate(scheduleDate.from);
+    setToDate(scheduleDate.to);
+
+    const formattedFromDate = new Date(scheduleDate.from).toLocaleDateString(
+      'en-US',
+      {
+        day: 'numeric',
+        month: 'short',
+      }
+    );
+
+    const formattedToDate = new Date(scheduleDate.to).toLocaleDateString(
+      'en-US',
+      {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }
+    );
+
+    setFormattedDate(`${formattedFromDate} - ${formattedToDate}`);
+  }, [scheduleDate.from, scheduleDate.to]);
+
   return (
     <>
-      <div className="w-full mb-4 p-2 h-[120px] flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
-        <div className="w-[120px] h-full">
-          <img
-            src={data.image}
-            alt="image-location"
-            className="object-cover w-full h-full rounded-xl"
-          />
-        </div>
-        <div className="flex flex-col py-2">
-          <div className="flex items-center gap-2">
-            <CalendarDays color="grey" size={17} />
-            <small className="text-gray-500 text-md">23 January 2023</small>
+      <Link href={`/schedule-trips/${scheduleId}`}>
+        <div className="w-full cursor-pointer mb-4 p-2 h-[120px] flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
+          <div className="w-[120px] h-full">
+            <img
+              src={image}
+              alt="image-location"
+              className="object-cover w-full h-full rounded-xl"
+            />
           </div>
-          <div className="flex flex-col">
-            <h2 className="text-lg font-semibold pt-2">{data.name}</h2>
-            <div className="flex gap-x-2 items-center py-1">
-              <MapPin color="grey" size={17} />
-              <span className="text-gray-600">{data.location}</span>
+          <div className="flex flex-col py-2">
+            <div className="flex items-center gap-2">
+              <CalendarDays color="grey" size={17} />
+              <small className="text-gray-500 text-md">{formattedDate}</small>
+            </div>
+            <div className="flex flex-col">
+              <h2 className="text-lg font-semibold pt-2 w-[180px] truncate">
+                {name}
+              </h2>
+              <div className="flex gap-x-2 items-center py-1">
+                <MapPin color="grey" size={17} />
+                <span className="w-[180px] truncate text-gray-600">
+                  {location}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 };
 
 const ScheduleTrips = () => {
   const [date, setDate] = useState(new Date());
+
+  const { data: currentUser } = useCurrentUser();
+  const { data: schedules, isLoading } = useSchedulesData(currentUser?.id);
   return (
     <>
       <BackNavigator name="Schedule" addButton={true} />
@@ -53,9 +95,41 @@ const ScheduleTrips = () => {
         </div>
       </div>
       <div className="px-4 mt-4  h-full no-scrollbar">
-        {locations.map((data, index) => (
-          <Trip key={index} data={data} />
-        ))}
+        {!isLoading ? (
+          schedules?.map((item, index) => (
+            <Trip
+              id={item?.id}
+              scheduleId={item?.scheduleId}
+              key={index}
+              name={item?.name}
+              date={item?.scheduleDate}
+              image={item?.image}
+              location={item?.location}
+            />
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full my-6">
+            <div className="flex justify-center">
+              <Oval
+                height={55}
+                width={55}
+                color="orange"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel="oval-loading"
+                secondaryColor="orange"
+                strokeWidth={4}
+                strokeWidthSecondary={4}
+              />
+            </div>
+          </div>
+        )}
+        {schedules?.length === 0 && (
+          <p className="font-semibold text-center text-gray-600 text-xl">
+            You have no scheduled trips
+          </p>
+        )}
         <div className="h-[100px]" />
       </div>
     </>

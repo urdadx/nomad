@@ -49,16 +49,14 @@ export const Form = ({ type }) => {
           type="text"
           placeholder="Email"
         />
-        <Input
+        {/* <Input
           name="password"
           className="rounded-lg h-12 text-md"
           type="password"
           placeholder="Password"
-        />
+        /> */}
       </div>
-      <p className="text-right font-semibold my-4 text-gray-600">
-        Forgot Password?
-      </p>
+
       <div className="my-6 ">
         <Button
           disabled={loading}
@@ -71,7 +69,9 @@ export const Form = ({ type }) => {
           {loading ? (
             <LoadingDots />
           ) : (
-            <p>{type === 'login' ? 'Sign In' : 'Sign Up'}</p>
+            <p>
+              {type === 'login' ? 'Continue with email' : 'Continue with email'}
+            </p>
           )}
         </Button>
       </div>

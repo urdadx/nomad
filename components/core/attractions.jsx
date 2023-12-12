@@ -67,7 +67,7 @@ export const AttractionCard = ({ id, width, img, name, location, rating }) => {
           <CardFooter className="grid grid-col-3">
             <div className="my-2 flex justify-between items-center">
               <div className="">
-                <p className="truncate text-lg w-[160px]">{name}</p>
+                <p className="truncate text-md w-[160px]">{name}</p>
               </div>
               <div className="text-lg flex gap-1 items-center">
                 <small>

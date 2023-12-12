@@ -1,26 +1,42 @@
 import BackNavigator from '@/components/utils/back-navigator';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { DateRangePicker } from '@/components/ui/date-picker';
+import { DatePicker, DateRangePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
-import useCurrentUser from '@/hooks/use-current-user';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { useState, useRef } from 'react';
-import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useRef, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useStore } from '@/contexts/context';
-import { nanoid } from 'nanoid';
+import axios from 'axios';
+import useCurrentUser from '@/hooks/use-current-user';
+import LoadingDots from '@/components/utils/loading-dots/loading-dots';
+import { useRouter } from 'next/router';
+import useSchedule from '@/hooks/use-schedule';
 
-const CreateSchedule = () => {
-  const { data: currentUser } = useCurrentUser();
+const EditSchedule = () => {
   const queryClient = useQueryClient();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
+  const router = useRouter();
+  const { query } = router;
+  const { scheduleId } = query;
+
+  const { data } = useSchedule(scheduleId);
+
+  const [name, setName] = useState(data?.name);
+  const [location, setLocation] = useState(data?.location);
   const { scheduleDate, setScheduleDate } = useStore();
-  const [scheduleId, setScheduleId] = useState(nanoid(20));
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name || '');
+      setLocation(data.location || '');
+      setScheduleDate(new Date(data?.scheduleDate));
+    }
+  }, [data, setScheduleDate]);
+
+  const { currentUser } = useCurrentUser();
 
   const fileInputRef = useRef(null);
   const [bioImage, setBioImage] = useState('');
@@ -51,14 +67,13 @@ const CreateSchedule = () => {
 
   const image = bioImage;
 
-  const addScheduleTrip = useMutation(
-    async ({ name, scheduleDate, location, image, scheduleId }) => {
-      await axios.post('/api/schedule/add-schedule', {
+  const editSchedule = useMutation(
+    async ({ name, scheduleDate, location, image }) => {
+      await axios.patch(`/api/schedule/${scheduleId}`, {
         name,
         scheduleDate,
         location,
         image,
-        scheduleId,
       });
     },
     {
@@ -68,36 +83,32 @@ const CreateSchedule = () => {
         });
         setIsLoading(false);
         setName('');
-        setLocation('');
         setScheduleDate('');
-        setScheduleId('');
-      },
-      onError: () => {
-        setIsLoading(false);
+        setLocation('');
       },
     }
   );
 
-  const handleSubmitSchedule = async () => {
+  const handleEditSchedule = async () => {
     setIsLoading(true);
     await toast.promise(
-      addScheduleTrip.mutateAsync({
+      editSchedule.mutateAsync({
         name,
         scheduleDate,
         location,
         image,
-        scheduleId,
       }),
       {
-        loading: 'Creating schedule',
-        success: 'Schedule created ',
+        loading: 'Editing schedule',
+        success: 'Changes added successfully',
         error: 'An error occured',
       }
     );
   };
+
   return (
     <>
-      <BackNavigator name="Add Schedule" cancel={true} />
+      <BackNavigator name="Edit schedule" cancel={true} />
       <div className="px-6 h-screen no-scrollbar mt-8">
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="name">Name</Label>
@@ -115,7 +126,9 @@ const CreateSchedule = () => {
           <DateRangePicker />
         </div>
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location">
+            Locations (Seperate each location with a comma)
+          </Label>
           <Input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
@@ -125,11 +138,12 @@ const CreateSchedule = () => {
             placeholder="Location"
           />
         </div>
+
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
-          <Label htmlFor="location">Thumbnail</Label>
+          <Label htmlFor="image">Image</Label>
           <Input
-            ref={fileInputRef}
             accept="image/*"
+            ref={fileInputRef}
             onChange={handleFileSelect}
             className="rounded-lg h-12"
             type="file"
@@ -138,15 +152,17 @@ const CreateSchedule = () => {
         </div>
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Button
-            onClick={handleSubmitSchedule}
+            onClick={handleEditSchedule}
             className="w-full h-12 text-md bg-primary hover:bg-orange-400"
           >
-            {!isLoading ? 'Schedule Trip' : <LoadingDots color="#fff" />}
+            {!isLoading ? 'Edit Schedule' : <LoadingDots color="#fff" />}
           </Button>
         </div>
+
+        <div className="h-[100px]" />
       </div>
     </>
   );
 };
 
-export default CreateSchedule;
+export default EditSchedule;

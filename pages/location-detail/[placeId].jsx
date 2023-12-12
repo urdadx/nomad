@@ -6,8 +6,9 @@ import { Oval } from 'react-loader-spinner';
 import { Button } from '@/components/ui/button';
 import useAttractionsDetails from '@/hooks/use-attractions-details';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReviewCard from '@/components/utils/review-card';
+import Link from 'next/link';
 
 const LocationDetail = () => {
   const router = useRouter();
@@ -16,7 +17,13 @@ const LocationDetail = () => {
   const { placeId } = query;
   const { data, isLoading } = useAttractionsDetails(placeId);
 
-  const [cordinates, setCordinates] = useState(data?.geometry.location);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  useEffect(() => {
+    setLatitude(data?.geometry.location.lat);
+    setLongitude(data?.geometry.location.lng);
+  }, [data?.geometry.location.lat, data?.geometry.location.lng]);
 
   const attractionPhoto = `https://maps.googleapis.com/maps/api/place/photo?key=${process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY}&photoreference=${data?.photos[0].photo_reference}&maxwidth=${data?.photos[0].width}`;
 
@@ -50,7 +57,7 @@ const LocationDetail = () => {
             </div>
             <div className="px-6 flex items-center gap-8">
               <div className="flex items-center gap-1">
-                <small className=" text-lg text-gray-500">
+                <small className="w-[80px] truncate text-lg text-gray-500">
                   {data?.address_components[2].long_name}
                 </small>
                 <MapPin color="grey" size={17} />
@@ -120,7 +127,12 @@ const LocationDetail = () => {
             </div>
             <div className="bottom-0 px-4 inset-x-0">
               <Button className="bg-primary w-full h-12 text-lg hover:bg-orange-600">
-                Visit Location
+                <Link
+                  className="w-full"
+                  href={`/location-map?destination=${data?.name}&longitude=${longitude}&latitude=${latitude}`}
+                >
+                  View on map
+                </Link>
               </Button>
             </div>
           </div>
