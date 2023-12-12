@@ -30,7 +30,6 @@ export default async function handler(req, res) {
         attractionsData.push(limitedResults);
       }
     }
-    console.log(attractionsData);
     res.status(200).json(attractionsData);
   } catch (error) {
     console.error(error.message);
