@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
+import { locations } from '@/lib/stock-img-locations';
+import { Drawer } from 'vaul';
 
 const Resend = () => {
   const [email, setEmail] = useState('');
@@ -30,42 +32,20 @@ const Resend = () => {
 
   return (
     <>
-      <BackNavigator name="Email verification" showNotification={true} />
-      <section className="h-full w-full justify-center ">
-        <form onSubmit={handleResendEmail} className="mt-24">
-          <h2 className="text-center font-semibold text-xl">
-            Resend Verification
-          </h2>
-          <div className="px-6 my-4">
-            <p className="text-gray-500 text-center">
-              Your email verification link has expired. Enter your email address
-              for a new one.
-            </p>
-          </div>
-          <div className="px-6 my-6 w-full">
-            <Input
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
-              type="email"
-              className="w-full h-12"
-            />
-          </div>
-          <div className="flex justify-center px-6">
-            <Button
-              type="submit"
-              className="bg-slate-950 w-full text-md rounded-xl h-14 hover:bg-slate-700"
-            >
-              {isLoading ? (
-                <LoadingDots color="#fff" />
-              ) : (
-                'Resend verification link'
-              )}
-            </Button>
-          </div>
-        </form>
-      </section>
+      {locations.map((item, index) => {
+        return (
+          <Drawer.Root key={index} shouldScaleBackground>
+            <Drawer.Trigger asChild>
+              <div className="flex flex-row">
+                <Button className="h-12 bg-primary mb-6">{item.name}</Button>
+              </div>
+            </Drawer.Trigger>
+            <Drawer.Portal>
+              <Drawer.Content className="h-[50%]">hello world</Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
+        );
+      })}
     </>
   );
 };

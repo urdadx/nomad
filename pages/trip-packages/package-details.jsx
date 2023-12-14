@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Oval } from 'react-loader-spinner';
-import { Users, CircleDollarSign } from 'lucide-react';
+import { Users, Calendar, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BackNavigator from '@/components/utils/back-navigator';
 
@@ -56,13 +56,13 @@ const PackageDetails = ({ data, isLoading }) => {
                 {data?.numSpots} seats left
               </p>
             </div>
-            <div className="px-4 my-8 flex flex-col gap-2">
+            <div className="px-4 my-6 flex flex-col gap-2">
               <h2 className="font-semibold text-xl">
-                <span>Date</span>
+                <span>Date of trip</span>
               </h2>
               <p className="text-gray-500 text-justify flex items-center gap-2">
                 <span>
-                  <Users color="grey" size={18} />
+                  <Calendar color="grey" size={18} />
                 </span>
                 {formattedDate}
               </p>
@@ -78,7 +78,7 @@ const PackageDetails = ({ data, isLoading }) => {
                 {data?.cost} USD
               </p>
             </div>
-            <div className="bottom-0 px-4 inset-x-0">
+            <div className="bottom-0 px-4 mt-8 inset-x-0">
               <Button className="bg-primary w-full h-12 text-lg hover:bg-orange-600">
                 Book a seat
               </Button>

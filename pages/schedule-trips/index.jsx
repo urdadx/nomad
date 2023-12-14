@@ -7,6 +7,7 @@ import useSchedulesData from '@/hooks/use-schedules-data';
 import useCurrentUser from '@/hooks/use-current-user';
 import { Oval } from 'react-loader-spinner';
 import Link from 'next/link';
+import { Trash, Pen, Eye } from 'lucide-react';
 
 export const Trip = ({ scheduleId, image, name, location, date }) => {
   const [fromDate, setFromDate] = useState(null);

@@ -1,17 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
-import LoadingDots from '../utils/loading-dots/loading-dots';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import { Input } from '../ui/input';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
-import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
+import LoadingDots from '../utils/loading-dots/loading-dots';
+import GoogleIcon from '../utils/google-icon';
 
-export const Form = ({ type }) => {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+export function Form({ type }) {
+  const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const next = searchParams?.get('next');
 
@@ -20,95 +16,45 @@ export const Form = ({ type }) => {
     error && toast.error(error);
   }, [searchParams]);
 
-  const [email, setEmail] = useState('');
-
   return (
-    <form
-      onSubmit={(e) => {
-        setLoading(true);
-        e.preventDefault();
-        signIn('email', { email, redirect: false });
-        setLoading(false);
-      }}
-      className="px-4 my-8"
-    >
-      <div className="flex flex-col gap-8">
-        {type === 'register' && (
-          <Input
-            name="username"
-            className="rounded-lg h-12 text-md"
-            type="text"
-            placeholder="Username"
-          />
-        )}
-        <Input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          name="email"
-          className="rounded-lg h-12 text-md"
-          type="text"
-          placeholder="Email"
-        />
-        <Input
-          name="password"
-          className="rounded-lg h-12 text-md"
-          type="password"
-          placeholder="Password"
-        />
-      </div>
-
-      <div className="my-6 ">
-        <Button
-          disabled={loading}
-          className={`${
-            loading
-              ? 'cursor-not-allowed w-full bg-black'
-              : 'w-full h-12 bg-black text-white hover:bg-slate-800'
-          }`}
-        >
-          {loading ? (
-            <LoadingDots />
-          ) : (
-            <p>
-              {type === 'login' ? 'Continue with email' : 'Continue with email'}
-            </p>
-          )}
-        </Button>
-      </div>
-      {type === 'register' ? (
-        <p className="flex gap-2 items-center justify-center text-center my-6 ">
-          <span className="text-gray-500"> Already have an account? </span>
-          <strong>
-            <Link href="/login">Sign in</Link>
-          </strong>
-        </p>
-      ) : (
-        <p className="flex gap-2 items-center justify-center text-center my-6 ">
-          <span className="text-gray-500"> Don&apos;t have an account?</span>
-          <strong>
-            <Link href="/register">Sign up</Link>
-          </strong>
-        </p>
-      )}
-      <Button
+    <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 sm:px-16">
+      <button
         onClick={() => {
-          setLoading(true);
+          setIsLoading(true);
           signIn('google', {
             ...(next && next.length > 0 ? { callbackUrl: next } : {}),
           });
         }}
-        className="bg-transparent rounded-lg my-10 gap-2 w-full flex justify-center cursor-pointer hover:bg-gray-100 h-12"
+        className={`${
+          isLoading
+            ? 'cursor-not-allowed border-gray-200 bg-gray-100'
+            : 'border-black bg-black text-white hover:bg-white hover:text-black'
+        } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
       >
-        <div className="flex items-center gap-2">
-          <img
-            className="w-6 h-6"
-            src="https://img.icons8.com/color/48/google-logo.png"
-            alt="social-icons"
-            loading="lazy"
-          />
-          <p className="text-gray-600 font-semibold">Continue with Google</p>
-        </div>
-      </Button>
-    </form>
+        {isLoading ? (
+          <LoadingDots color="#808080" />
+        ) : (
+          <p className="flex gap-2 items-center font-semibold">
+            <GoogleIcon /> Continue with Google
+          </p>
+        )}
+      </button>
+
+      {type === 'login' ? (
+        <p className="text-center text-sm text-gray-600">
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="font-semibold text-gray-800">
+            Sign up
+          </Link>
+        </p>
+      ) : (
+        <p className="text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link href="/login" className="font-semibold text-gray-800">
+            Sign in
+          </Link>
+        </p>
+      )}
+    </div>
   );
-};
+}
