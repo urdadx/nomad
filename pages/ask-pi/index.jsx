@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Mic, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { nanoid } from 'nanoid';
+import { MemoizedReactMarkdown } from '@/components/core/memoized-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
 
 const AskPi = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -129,7 +132,48 @@ const AskPi = () => {
                     : 'bg-blue-100'
                 )}
               >
-                {message.content}
+                <MemoizedReactMarkdown
+                  className="prose prose-stone prose-base prose-pre:rounded-md w-full flex-1 leading-6 prose-p:leading-[1.8rem] prose-pre:bg-[#282c34] max-w-full"
+                  remarkPlugins={[remarkGfm, remarkMath]}
+                  components={{
+                    code({ node, inline, className, children, ...props }) {
+                      if (children.length) {
+                        if (children[0] == '▍') {
+                          return (
+                            <span className="mt-1 animate-pulse cursor-default">
+                              ▍
+                            </span>
+                          );
+                        }
+
+                        children[0] = children[0].replace('`▍`', '▍');
+                      }
+                    },
+                    table({ children }) {
+                      return (
+                        <table className="border-collapse border border-black px-3 py-1 ">
+                          {children}
+                        </table>
+                      );
+                    },
+                    th({ children }) {
+                      return (
+                        <th className="break-words border border-black bg-gray-500 px-3 py-1 text-white ">
+                          {children}
+                        </th>
+                      );
+                    },
+                    td({ children }) {
+                      return (
+                        <td className="break-words border border-black px-3 py-1">
+                          {children}
+                        </td>
+                      );
+                    },
+                  }}
+                >
+                  {message.content}
+                </MemoizedReactMarkdown>{' '}
               </div>
             ))}
             {isLoading && (

@@ -23,10 +23,12 @@ const CreateSchedule = () => {
   const [scheduleId, setScheduleId] = useState(nanoid(20));
 
   const fileInputRef = useRef(null);
-  const [bioImage, setBioImage] = useState('');
+  const [image, setImage] = useState(
+    'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'
+  );
 
   const onLoad = (fileString) => {
-    setBioImage(fileString);
+    setImage(fileString);
   };
 
   const getBase64 = (file) => {
@@ -43,13 +45,26 @@ const CreateSchedule = () => {
     setIsLoading(true);
     const files = e.target.files;
     const file = files && files[0];
+
     if (file) {
+      // File size validation
+      if (file.size > 1024 * 1024) {
+        toast.error('File size should not exceed 1MB');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if the selected file is an image
+      if (!file.type.startsWith('image/')) {
+        toast.error('Only image files are allowed');
+        setIsLoading(false);
+        return;
+      }
+
       getBase64(file);
     }
     setIsLoading(false);
   };
-
-  const image = bioImage;
 
   const addScheduleTrip = useMutation(
     async ({ name, scheduleDate, location, image, scheduleId }) => {

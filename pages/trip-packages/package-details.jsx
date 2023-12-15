@@ -3,6 +3,7 @@ import { Oval } from 'react-loader-spinner';
 import { Users, Calendar, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BackNavigator from '@/components/utils/back-navigator';
+import toast from 'react-hot-toast';
 
 const PackageDetails = ({ data, isLoading }) => {
   const inputDateString = data?.tripdate;
@@ -79,7 +80,12 @@ const PackageDetails = ({ data, isLoading }) => {
               </p>
             </div>
             <div className="bottom-0 px-4 mt-8 inset-x-0">
-              <Button className="bg-primary w-full h-12 text-lg hover:bg-orange-600">
+              <Button
+                onClick={() => {
+                  toast.success('You booked a seat');
+                }}
+                className="bg-primary w-full h-12 text-lg hover:bg-orange-600"
+              >
                 Book a seat
               </Button>
             </div>

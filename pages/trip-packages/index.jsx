@@ -6,6 +6,7 @@ import usePackagesData from '@/hooks/use-packages-data';
 import { Oval } from 'react-loader-spinner';
 import Link from 'next/link';
 import { Trash, Pen } from 'lucide-react';
+import { Drawer } from 'vaul';
 
 export const Package = ({ id, name, date, image, spots, cost, tripId }) => {
   const formatDate = (dateObj) => {
@@ -28,7 +29,7 @@ export const Package = ({ id, name, date, image, spots, cost, tripId }) => {
   const isAdmin = currentUser?.role === 'admin';
 
   return (
-    <>
+    <Drawer.Root shouldScaleBackground>
       <Link href={`/trip-packages/${tripId}`}>
         <div className="w-full cursor-pointer mb-4 p-2 h-[125px] flex gap-x-4 rounded-xl border bg-card text-card-foreground shadow-sm">
           <div className="w-[120px] h-full">
@@ -72,7 +73,7 @@ export const Package = ({ id, name, date, image, spots, cost, tripId }) => {
           </div>
         </div>
       </Link>
-    </>
+    </Drawer.Root>
   );
 };
 
@@ -128,6 +129,11 @@ const TripPackages = () => {
             </div>
           )}
         </div>
+        {packages?.length === 0 && (
+          <p className="font-semibold my-24 text-center text-gray-600 text-lg">
+            No trip packages available 😢
+          </p>
+        )}
         <div className="h-[100px]" />
       </div>
     </>

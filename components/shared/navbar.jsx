@@ -82,7 +82,7 @@ const Navbar = () => {
                     <div className="container mt-8 mb-6 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-2 hover:bg-zinc">
                       <CircleUserRound className="text-zinc-500" />
                       <span className="font-semibold text-lg text-zinc-500">
-                        {currentUser?.name}
+                        <Link href="/profile">{currentUser?.name}</Link>
                       </span>
                     </div>
                     <div

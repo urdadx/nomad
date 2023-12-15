@@ -131,7 +131,7 @@ const GlobeAnimation = ({ markers }) => {
                 const delta = e.clientX - pointerInteracting.current;
                 pointerInteractionMovement.current = delta;
                 api.start({
-                  r: delta / 200,
+                  r: delta / 100,
                 });
               }
             }}

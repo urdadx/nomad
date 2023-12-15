@@ -10,48 +10,36 @@ import {
 } from '@/components/ui/popover';
 import { useStore } from '@/contexts/context';
 
-export const DateRangePicker = ({ className }) => {
+export const DateRangePicker = () => {
   const { scheduleDate, setScheduleDate } = useStore();
 
   return (
-    <div className={cn('grid gap-2', className)}>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            id="date"
-            variant={'outline'}
-            className={cn(
-              'w-full h-12 justify-start text-left font-normal',
-              !scheduleDate && 'text-muted-foreground'
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {scheduleDate?.from ? (
-              scheduleDate.to ? (
-                <>
-                  {format(scheduleDate.from, 'LLL dd, y')} -{' '}
-                  {format(scheduleDate.to, 'LLL dd, y')}
-                </>
-              ) : (
-                format(scheduleDate.from, 'LLL dd, y')
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={scheduleDate?.from}
-            selected={scheduleDate}
-            onSelect={setScheduleDate}
-            numberOfMonths={2}
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={'outline'}
+          className={cn(
+            'w-full h-12 justify-start text-left font-normal',
+            !scheduleDate && 'text-muted-foreground'
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {scheduleDate ? (
+            format(scheduleDate, 'PPP')
+          ) : (
+            <span>Pick a date</span>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <Calendar
+          mode="single"
+          selected={scheduleDate}
+          onSelect={setScheduleDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
 };
 

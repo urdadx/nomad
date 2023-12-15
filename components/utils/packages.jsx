@@ -11,10 +11,10 @@ export const DestinationCard = ({ tripId, img, name, location, cost }) => {
     <div className="w-[290px] h-full">
       <Link
         href={`/trip-packages/${tripId}`}
-        className="px-4 flex gap-4 cursor-pointer"
+        className="px-4 flex gap-2 cursor-pointer"
       >
         <Card className="rounded-3xl">
-          <div className="p-3 bg-cover w-full h-[240px] sm:w-[265px]">
+          <div className="p-3 bg-cover w-[275px] h-[240px]">
             <img
               src={img}
               className=" w-full h-full rounded-2xl"

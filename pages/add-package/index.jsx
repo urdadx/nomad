@@ -11,6 +11,7 @@ import axios from 'axios';
 import useCurrentUser from '@/hooks/use-current-user';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { nanoid } from 'nanoid';
+import { Textarea } from '@/components/ui/textarea';
 
 const AddTripPackage = () => {
   const queryClient = useQueryClient();
@@ -21,16 +22,19 @@ const AddTripPackage = () => {
   const [cost, setCost] = useState();
   const [tripId, setTripId] = useState(nanoid(20));
   const { tripdate, setTripDate } = useStore();
+  const [description, setDescription] = useState('');
+  const [thumbnail, setThumbnail] = useState(
+    'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'
+  );
 
   const [isLoading, setIsLoading] = useState(false);
 
   const { currentUser } = useCurrentUser();
 
   const fileInputRef = useRef(null);
-  const [bioImage, setBioImage] = useState('');
 
   const onLoad = (fileString) => {
-    setBioImage(fileString);
+    setThumbnail(fileString);
   };
 
   const getBase64 = (file) => {
@@ -47,13 +51,26 @@ const AddTripPackage = () => {
     setIsLoading(true);
     const files = e.target.files;
     const file = files && files[0];
+
     if (file) {
+      // File size validation
+      if (file.size > 1024 * 1024) {
+        toast.error('File size should not exceed 1MB');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if the selected file is an image
+      if (!file.type.startsWith('image/')) {
+        toast.error('Only image files are allowed');
+        setIsLoading(false);
+        return;
+      }
+
       getBase64(file);
     }
     setIsLoading(false);
   };
-
-  const thumbnail = bioImage;
 
   const addTripPackage = useMutation(
     async ({ name, tripdate, location, numSpots, cost, thumbnail, tripId }) => {
@@ -78,12 +95,15 @@ const AddTripPackage = () => {
         setLocation('');
         setNumSpots(0);
         setTripId('');
+        setThumbnail('');
+        setDescription('');
         setCost(0);
       },
     }
   );
 
-  const handleSubmitPackage = async () => {
+  const handleSubmitPackage = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     await toast.promise(
       addTripPackage.mutateAsync({
@@ -106,10 +126,11 @@ const AddTripPackage = () => {
   return (
     <>
       <BackNavigator name="Add trip package" cancel={true} />
-      <div className="px-6 h-screen no-scrollbar mt-8">
+      <div className="px-6 h-full no-scrollbar mt-8">
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="name">Name</Label>
           <Input
+            required
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="rounded-lg h-12"
@@ -127,6 +148,7 @@ const AddTripPackage = () => {
             Location (Seperate each location with a comma)
           </Label>
           <Input
+            required
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="rounded-lg h-12"
@@ -138,6 +160,7 @@ const AddTripPackage = () => {
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="spots">Number of spots</Label>
           <Input
+            required
             value={numSpots}
             onChange={(e) => setNumSpots(e.target.value)}
             className="rounded-lg h-12"
@@ -146,9 +169,20 @@ const AddTripPackage = () => {
             placeholder="Enter number of spots"
           />
         </div>
+        {/* <div className="grid w-full max-w-sm items-center gap-2 mb-6">
+          <Label htmlFor="spots">Description</Label>
+          <Textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            placeholder="Briefly description what the package entails..."
+          />
+        </div> */}
+
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="cost">Package cost</Label>
           <Input
+            required
             value={cost}
             onChange={(e) => setCost(e.target.value)}
             className="rounded-lg h-12"
@@ -160,6 +194,7 @@ const AddTripPackage = () => {
         <div className="grid w-full max-w-sm items-center gap-2 mb-6">
           <Label htmlFor="image">Thumbnail</Label>
           <Input
+            required
             accept="image/*"
             ref={fileInputRef}
             onChange={handleFileSelect}

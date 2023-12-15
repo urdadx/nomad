@@ -8,37 +8,28 @@ import useCurrentUser from '@/hooks/use-current-user';
 import { Oval } from 'react-loader-spinner';
 import Link from 'next/link';
 import { Trash, Pen, Eye } from 'lucide-react';
+import { ScheduleForm } from '@/components/core/schedule-download';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import toast from 'react-hot-toast';
+import { Download } from 'lucide-react';
 
 export const Trip = ({ scheduleId, image, name, location, date }) => {
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
-  const [formattedDate, setFormattedDate] = useState(null);
+  const formatDate = (dateObj) => {
+    const dateString = dateObj.toString();
+    const date = new Date(dateString);
 
-  const scheduleDate = date;
-
-  useEffect(() => {
-    setFromDate(scheduleDate.from);
-    setToDate(scheduleDate.to);
-
-    const formattedFromDate = new Date(scheduleDate.from).toLocaleDateString(
-      'en-US',
-      {
-        day: 'numeric',
-        month: 'short',
-      }
+    const day = date.getDate();
+    const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(
+      date
     );
+    const year = date.getFullYear();
 
-    const formattedToDate = new Date(scheduleDate.to).toLocaleDateString(
-      'en-US',
-      {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      }
-    );
+    const formattedDate = `${day} ${month} ${year}`;
+    return formattedDate;
+  };
 
-    setFormattedDate(`${formattedFromDate} - ${formattedToDate}`);
-  }, [scheduleDate.from, scheduleDate.to]);
+  const formattedDate = formatDate(date);
 
   return (
     <>
@@ -79,6 +70,47 @@ const ScheduleTrips = () => {
 
   const { data: currentUser } = useCurrentUser();
   const { data: schedules, isLoading } = useSchedulesData(currentUser?.id);
+
+  const [loading, setIsLoading] = useState(false);
+
+  const downloadPDF = async () => {
+    try {
+      setIsLoading(true);
+      await toast.promise(
+        new Promise((resolve) => {
+          setTimeout(() => {
+            const capture = document.querySelector('.schedule-ref');
+            html2canvas(capture, { scale: 2 }).then((canvas) => {
+              const imgData = canvas.toDataURL('img/png');
+              const doc = new jsPDF('p', 'mm', 'a4');
+              const componentWidth = doc.internal.pageSize.getWidth();
+              const componentHeight = doc.internal.pageSize.getHeight();
+              doc.addImage(
+                imgData,
+                'PNG',
+                0,
+                0,
+                componentWidth,
+                componentHeight
+              );
+              setIsLoading(false);
+              doc.save('trip-schedule.pdf');
+              resolve();
+            });
+          }, 500);
+        }),
+        {
+          loading: 'Downloading...',
+          success: 'Download complete!',
+          error: 'Download failed',
+        }
+      );
+    } catch (error) {
+      console.error('Error during PDF download:', error);
+      setIsLoading(false);
+      toast.error('Download failed');
+    }
+  };
   return (
     <>
       <BackNavigator name="Schedule" addButton={true} />
@@ -93,6 +125,15 @@ const ScheduleTrips = () => {
       <div className="px-4 flex justify-between items-center">
         <div className="flex items-center gap-1 text-gray-600 text-lg">
           <span>My Schedule</span>
+        </div>
+        <div
+          onClick={downloadPDF}
+          className="flex items-center gap-1 cursor-pointer"
+        >
+          <span className="text-primary text-sm font-semibold">Download</span>
+          <span>
+            <Download size={20} className="text-primary font-semibold" />
+          </span>
         </div>
       </div>
       <div className="px-4 mt-4  h-full no-scrollbar">
@@ -131,6 +172,13 @@ const ScheduleTrips = () => {
             You have no scheduled trips
           </p>
         )}
+        <div
+          className={
+            loading ? 'w-full h-full schedule-ref block' : 'schedule-ref hidden'
+          }
+        >
+          <ScheduleForm schedules={schedules} />
+        </div>
         <div className="h-[100px]" />
       </div>
     </>
