@@ -19,7 +19,9 @@ const EditPackage = () => {
 
   const router = useRouter();
   const { query } = router;
-  const { packageId } = query;
+  const { packageId, view } = query;
+
+  console.log(view);
 
   const { data } = usePackage(packageId);
 
@@ -30,9 +32,10 @@ const EditPackage = () => {
   const { tripdate, setTripDate } = useStore();
 
   const [isLoading, setIsLoading] = useState(false);
-  const { currentUser } = useCurrentUser();
+  const { data: currentUser } = useCurrentUser();
 
   const isAdmin = currentUser?.role === 'admin';
+  console.log('The view:', typeof view, 'value:', view);
 
   useEffect(() => {
     if (data) {
@@ -120,7 +123,7 @@ const EditPackage = () => {
 
   return (
     <>
-      {isAdmin ? (
+      {view === 'false' ? (
         <>
           <BackNavigator name="Edit package" cancel={true} />
 

@@ -5,7 +5,6 @@ import { toast } from 'react-hot-toast';
 const usePackagesData = () => {
   const fetchPackages = async () => {
     const response = await axios.get(`/api/packages/add-package`);
-    console.log(response.data);
     return response.data;
   };
 

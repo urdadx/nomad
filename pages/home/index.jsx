@@ -63,7 +63,7 @@ const Home = () => {
         <div className="my-4 no-scrollbar">
           <Packages />
         </div>
-        <div className="container my-8">
+        {/* <div className="container my-8">
           <h2 className="text-primary text-center font-semibold text-2xl">
             Personalized AI Assistant
           </h2>
@@ -79,7 +79,8 @@ const Home = () => {
             />
           </div>
           <div className="h-[100px]" />
-        </div>
+        </div> */}
+        <div className="h-[100px]" />
       </section>
     </>
   );

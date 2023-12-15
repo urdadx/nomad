@@ -1,18 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import BackNavigator from '@/components/utils/back-navigator';
 import { Calendar } from '@/components/ui/calendar';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MapPin, CalendarDays } from 'lucide-react';
 import useSchedulesData from '@/hooks/use-schedules-data';
 import useCurrentUser from '@/hooks/use-current-user';
 import { Oval } from 'react-loader-spinner';
 import Link from 'next/link';
-import { Trash, Pen, Eye } from 'lucide-react';
+import { Trash, Pen } from 'lucide-react';
 import { ScheduleForm } from '@/components/core/schedule-download';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import toast from 'react-hot-toast';
 import { Download } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Drawer } from 'vaul';
+import axios from 'axios';
 
 export const Trip = ({ scheduleId, image, name, location, date }) => {
   const formatDate = (dateObj) => {
@@ -29,39 +32,83 @@ export const Trip = ({ scheduleId, image, name, location, date }) => {
     return formattedDate;
   };
 
+  const queryClient = useQueryClient();
+
   const formattedDate = formatDate(date);
 
+  const deleteMutation = useMutation(
+    async () => {
+      await axios.delete(`/api/schedule/${scheduleId}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['schedules', currentUser?.id],
+        });
+      },
+    }
+  );
+
+  const { currentUser } = useCurrentUser();
+
+  const handleDeleteSchedule = async () => {
+    await toast.promise(deleteMutation.mutateAsync(), {
+      loading: 'Deleting schedule',
+      success: 'Schedule deleted successfully',
+      error: 'An error occured',
+    });
+  };
+
   return (
-    <>
-      <Link href={`/schedule-trips/${scheduleId}`}>
-        <div className="w-full cursor-pointer mb-4 p-2 h-[120px] flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
-          <div className="w-[120px] h-full">
-            <img
-              src={image}
-              alt="image-location"
-              className="object-cover w-full h-full rounded-xl"
-            />
-          </div>
-          <div className="flex flex-col py-2">
-            <div className="flex items-center gap-2">
-              <CalendarDays color="grey" size={17} />
-              <small className="text-gray-500 text-md">{formattedDate}</small>
+    <Drawer.Root>
+      <Drawer.Trigger asChild>
+        <Link href={'#'}>
+          <div className="w-full cursor-pointer mb-4 p-2 h-[120px] flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
+            <div className="w-[120px] h-full">
+              <img
+                src={image}
+                alt="image-location"
+                className="object-cover w-full h-full rounded-xl"
+              />
             </div>
-            <div className="flex flex-col">
-              <h2 className="text-lg font-semibold pt-2 w-[180px] truncate">
-                {name}
-              </h2>
-              <div className="flex gap-x-2 items-center py-1">
-                <MapPin color="grey" size={17} />
-                <span className="w-[180px] truncate text-gray-600">
-                  {location}
-                </span>
+            <div className="flex flex-col py-2">
+              <div className="flex items-center gap-2">
+                <CalendarDays color="grey" size={17} />
+                <small className="text-gray-500 text-md">{formattedDate}</small>
+              </div>
+              <div className="flex flex-col">
+                <h2 className="text-lg font-semibold pt-2 w-[180px] truncate">
+                  {name}
+                </h2>
+                <div className="flex gap-x-2 items-center py-1">
+                  <MapPin color="grey" size={17} />
+                  <span className="w-[180px] truncate text-gray-600">
+                    {location}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Link>
-    </>
+        </Link>
+      </Drawer.Trigger>
+      <Drawer.Portal>
+        <Drawer.Content className="bg-white lg:w-[395px] mx-auto flex flex-col rounded-t-[20px] lg:h-[23%] h-[25%] mt-24 fixed bottom-0 left-0 right-0 border">
+          <div className="px-6 mt-8 mb-4 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc">
+            <Pen className="text-zinc-500" />
+            <span className="font-semibold text-lg text-zinc-500">
+              <Link href={`/schedule-trips/${scheduleId}`}>Edit schedule</Link>
+            </span>
+          </div>
+          <div
+            onClick={handleDeleteSchedule}
+            className="px-6 mb-1 mt-2 bg-white w-full rounded-4xl cursor-pointer flex items-center gap-4 hover:bg-zinc"
+          >
+            <Trash className="text-red-400" size={24} />
+            <span className="font-semibold text-lg text-red-400">Delete</span>
+          </div>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 };
 
