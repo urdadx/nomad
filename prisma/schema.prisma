@@ -48,7 +48,6 @@ model TripPackages {
   location   String
   numSpots   Int
   cost       Int
-  description String
   tripId     String
   thumbnail  String     @default("https://img.icons8.com/external-filled-outline-lima-studio/64/external-holiday-daily-planner-filled-outline-lima-studio.png") 
   userId      String    @db.ObjectId
