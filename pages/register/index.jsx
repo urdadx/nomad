@@ -7,7 +7,7 @@ export default function Register() {
   return (
     <>
       <Head>
-        <title>Librelinks | Register</title>
+        <title>Nomad | Register</title>
       </Head>
       <div className=" w-full inset-0 -z-10 h-screen mx-auto bg-white flex  items-center justify-center ">
         <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">

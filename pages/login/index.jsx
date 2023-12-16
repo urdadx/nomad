@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Librelinks | Login</title>
+        <title>Nomad | Login</title>
       </Head>
       <div className=" lg:w-full w-[360px] inset-0 -z-10 h-screen mx-auto bg-white flex items-center justify-center ">
         <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">

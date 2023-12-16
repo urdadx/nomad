@@ -2,15 +2,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   try {
-    const cities = [
-      'Accra',
-      'Kumasi',
-      'Ho',
-      'Tamale',
-      'Wa',
-      'Bolgantanga',
-      'Sunyani',
-    ];
+    const cities = ['Accra', 'Kumasi', 'Ho', 'Wa', 'Bolgantanga', 'Sunyani'];
     const attractionsData = [];
 
     for (const city of cities) {

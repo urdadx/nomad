@@ -3,7 +3,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Mic, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { nanoid } from 'nanoid';
 import { MemoizedReactMarkdown } from '@/components/core/memoized-markdown';
@@ -204,11 +204,12 @@ const AskPi = () => {
             />
             {inputLength === 0 ? (
               <Button
-                className="rounded-full bg-primary"
+                disabled
+                className="rounded-full bg-orange-400"
                 type="submit"
                 size="icon"
               >
-                <Mic className="h-4 w-4" />
+                <Send className="h-4 w-4" />
               </Button>
             ) : (
               <Button

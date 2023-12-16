@@ -63,23 +63,7 @@ const Home = () => {
         <div className="my-4 no-scrollbar">
           <Packages />
         </div>
-        {/* <div className="container my-8">
-          <h2 className="text-primary text-center font-semibold text-2xl">
-            Personalized AI Assistant
-          </h2>
-          <p className="text-center my-2">
-            Get a personalized itinerary just for you, guided by traveler tips
-            and reviews
-          </p>
-          <div className="bg-contain mx-auto w-[300px] h-[250px] mt-2 rounded-2xl cursor-pointer">
-            <img
-              src="/assets/chatbot.png"
-              alt="chat-bot"
-              className="object-contain w-full h-full"
-            />
-          </div>
-          <div className="h-[100px]" />
-        </div> */}
+
         <div className="h-[100px]" />
       </section>
     </>
