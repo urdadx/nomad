@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-export const Package = ({ id, name, date, image, spots, cost, tripId }) => {
+export const Package = ({ name, date, image, spots, cost, tripId }) => {
   const formatDate = (dateObj) => {
     const dateString = dateObj.toString();
     const date = new Date(dateString);
@@ -31,7 +31,6 @@ export const Package = ({ id, name, date, image, spots, cost, tripId }) => {
 
   const { data: currentUser } = useCurrentUser();
   const isAdmin = currentUser?.role === 'admin';
-  console.log(isAdmin);
 
   const deleteMutation = useMutation(
     async () => {
@@ -94,30 +93,41 @@ export const Package = ({ id, name, date, image, spots, cost, tripId }) => {
         </Link>
       </Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Content className="bg-white lg:w-[395px] mx-auto flex flex-col rounded-t-[20px] lg:h-[30%] h-[25%] mt-24 fixed bottom-0 left-0 right-0 border">
-          <div className="px-6 mt-8 mb-4 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc">
+        <Drawer.Content
+          className={`bg-white lg:w-[395px] mx-auto flex flex-col rounded-t-[20px] ${
+            isAdmin ? 'lg:h-[30%] h-[25%]' : 'lg:h-[17%] h-[15%]'
+          }  mt-24 fixed bottom-0 left-0 right-0 border`}
+        >
+          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mt-4 " />
+          <Link
+            href={`/trip-packages/${tripId}?view=${true}`}
+            className="px-6 mt-8 mb-4 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc"
+          >
             <Eye className="text-zinc-500" />
             <span className="font-semibold text-lg text-zinc-500">
-              <Link href={`/trip-packages/${tripId}?view=${true}`}>
-                View details
-              </Link>
+              <span>View package details</span>
             </span>
-          </div>
-          <div className="px-6 mt-2 mb-6 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc">
-            <Pen className="text-zinc-500" />
-            <span className="font-semibold text-lg text-zinc-500">
-              <Link href={`/trip-packages/${tripId}?view=${false}`}>
-                Edit package
-              </Link>
-            </span>
-          </div>
-          <div
-            onClick={handleDeletePackage}
-            className="px-6 mb-4 bg-white w-full rounded-4xl cursor-pointer flex items-center gap-4 hover:bg-zinc"
-          >
-            <Trash className="text-red-400" size={24} />
-            <span className="font-semibold text-lg text-red-400">Delete</span>
-          </div>
+          </Link>
+          {isAdmin && (
+            <Link
+              href={`/trip-packages/${tripId}?view=${false}`}
+              className="px-6 mt-2 mb-6 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc"
+            >
+              <Pen className="text-zinc-500" />
+              <span className="font-semibold text-lg text-zinc-500">
+                <span>Edit package</span>
+              </span>
+            </Link>
+          )}
+          {isAdmin && (
+            <div
+              onClick={handleDeletePackage}
+              className="px-6 mb-4 bg-white w-full rounded-4xl cursor-pointer flex items-center gap-4 hover:bg-zinc"
+            >
+              <Trash className="text-red-400" size={24} />
+              <span className="font-semibold text-lg text-red-400">Delete</span>
+            </div>
+          )}
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>

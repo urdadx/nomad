@@ -11,7 +11,6 @@ import axios from 'axios';
 import useCurrentUser from '@/hooks/use-current-user';
 import LoadingDots from '@/components/utils/loading-dots/loading-dots';
 import { nanoid } from 'nanoid';
-import { Textarea } from '@/components/ui/textarea';
 
 const AddTripPackage = () => {
   const queryClient = useQueryClient();
@@ -103,6 +102,16 @@ const AddTripPackage = () => {
   );
 
   const handleSubmitPackage = async (e) => {
+    if (
+      name.trim() === '' ||
+      location.trim() === '' ||
+      !tripdate ||
+      !cost ||
+      !numSpots
+    ) {
+      toast.error('Please fill the form');
+      return;
+    }
     e.preventDefault();
     setIsLoading(true);
     await toast.promise(

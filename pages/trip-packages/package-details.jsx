@@ -23,6 +23,7 @@ const PackageDetails = ({ data, isLoading }) => {
                 src={data?.thumbnail}
                 className="w-full h-full object-cover lg:rounded-xl"
                 alt="image-location"
+                loading="lazy"
               />
             </div>
           </div>

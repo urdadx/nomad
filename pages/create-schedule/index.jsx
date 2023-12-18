@@ -94,6 +94,10 @@ const CreateSchedule = () => {
   );
 
   const handleSubmitSchedule = async () => {
+    if (name.trim() === '' || !scheduleDate || !location) {
+      toast.error('Please fill the form');
+      return;
+    }
     setIsLoading(true);
     await toast.promise(
       addScheduleTrip.mutateAsync({

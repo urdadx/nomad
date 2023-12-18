@@ -13,6 +13,8 @@ const useSchedule = (schduleId) => {
     onError: () => {
       toast.error('An error occurred');
     },
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: 'always',
   });
 };
 

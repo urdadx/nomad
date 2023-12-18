@@ -13,6 +13,12 @@ export default async function middleware(req) {
     '/search',
     '/trip-packages',
     '/create-schedule',
+    '/maps-direction',
+    '/add-location',
+    '/add-package',
+    '/location-map',
+    '/location-detail',
+    '/update-profile',
   ];
 
   // If it's the root path, just render it

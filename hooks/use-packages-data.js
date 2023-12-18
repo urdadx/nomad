@@ -14,6 +14,8 @@ const usePackagesData = () => {
     onError: () => {
       toast.error('An error occurred');
     },
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: 'always',
   });
 };
 

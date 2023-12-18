@@ -116,17 +116,17 @@ const AskPi = () => {
           >
             <div
               className={cn(
-                'flex w-max bg-blue-100 max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm'
+                'flex w-max bg-blue-100 max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm'
               )}
             >
-              Hey, How can I help you?
+              Hello! How can I help plan your trip?
             </div>
 
             {messageList.map((message, index) => (
               <div
                 key={index}
                 className={cn(
-                  'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
+                  'flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
                   message.role === 'user'
                     ? 'ml-auto bg-primary text-primary-foreground'
                     : 'bg-blue-100'

@@ -35,6 +35,7 @@ export const Trip = ({ scheduleId, image, name, location, date }) => {
   const queryClient = useQueryClient();
 
   const formattedDate = formatDate(date);
+  const { currentUser } = useCurrentUser();
 
   const deleteMutation = useMutation(
     async () => {
@@ -49,8 +50,6 @@ export const Trip = ({ scheduleId, image, name, location, date }) => {
     }
   );
 
-  const { currentUser } = useCurrentUser();
-
   const handleDeleteSchedule = async () => {
     await toast.promise(deleteMutation.mutateAsync(), {
       loading: 'Deleting schedule',
@@ -62,7 +61,7 @@ export const Trip = ({ scheduleId, image, name, location, date }) => {
   return (
     <Drawer.Root>
       <Drawer.Trigger asChild>
-        <Link href={'#'}>
+        <div>
           <div className="w-full cursor-pointer mb-4 p-2 h-[120px] flex gap-4 rounded-xl border bg-card text-card-foreground shadow-sm">
             <div className="w-[120px] h-full">
               <img
@@ -89,11 +88,12 @@ export const Trip = ({ scheduleId, image, name, location, date }) => {
               </div>
             </div>
           </div>
-        </Link>
+        </div>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Content className="bg-white lg:w-[395px] mx-auto flex flex-col rounded-t-[20px] lg:h-[23%] h-[25%] mt-24 fixed bottom-0 left-0 right-0 border">
-          <div className="px-6 mt-8 mb-4 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc">
+          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mt-4 mb-1 sm:mb-4" />
+          <div className="px-6 max-auto mt-2 mb-4 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-4 hover:bg-zinc">
             <Pen className="text-zinc-500" />
             <span className="font-semibold text-lg text-zinc-500">
               <Link href={`/schedule-trips/${scheduleId}`}>Edit schedule</Link>
@@ -122,6 +122,9 @@ const ScheduleTrips = () => {
 
   const downloadPDF = async () => {
     try {
+      if (schedules?.length < 1) {
+        toast.error('There is nothing to download');
+      }
       setIsLoading(true);
       await toast.promise(
         new Promise((resolve) => {

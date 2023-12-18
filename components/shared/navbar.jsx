@@ -8,7 +8,6 @@ import { ToolTipWrapper } from '../utils/tooltip-wrapper';
 import { Drawer } from 'vaul';
 import { signOut } from 'next-auth/react';
 import { toast } from 'react-hot-toast';
-import useMediaQuery from '@/hooks/use-media-query';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Avatar from 'boring-avatars';
@@ -30,12 +29,10 @@ const Navbar = () => {
     }
   };
 
-  const { isMobile } = useMediaQuery();
-
   return (
     <>
       <header
-        className={`sticky top-0 z-50  flex items-center justify-between w-full h-16 px-4 shrink-0 ${
+        className={`sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 shrink-0 ${
           !drawerOpen &&
           'bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl'
         }`}
@@ -75,11 +72,9 @@ const Navbar = () => {
                   )}
                 </Drawer.Trigger>
                 <Drawer.Portal>
-                  {isMobile && (
-                    <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-                  )}
-                  <Drawer.Content className="bg-white lg:w-[395px] mx-auto flex flex-col rounded-t-[20px] lg:h-[20%] h-[17%] mt-24 fixed bottom-0 left-0 right-0 border">
-                    <div className="container mt-8 mb-6 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-2 hover:bg-zinc">
+                  <Drawer.Content className="bg-white lg:w-[395px] mx-auto flex flex-col rounded-t-[20px] lg:h-[25%] h-[17%] mt-24 fixed bottom-0 left-0 right-0 border">
+                    <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mt-4 mb-1 sm:mb-4" />
+                    <div className="container mt-4 mb-6 bg-white w-full rounded-4xl cursor-pointer  flex items-center gap-2 hover:bg-zinc">
                       <CircleUserRound className="text-zinc-500" />
                       <span className="font-semibold text-lg text-zinc-500">
                         <Link href="/profile">{currentUser?.name}</Link>

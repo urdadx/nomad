@@ -13,6 +13,8 @@ const usePackage = (packageId) => {
     onError: () => {
       toast.error('An error occurred');
     },
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: 'always',
   });
 };
 
