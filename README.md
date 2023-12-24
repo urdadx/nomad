@@ -1,5 +1,5 @@
 ## Disclaimer⚠️
-This project was built for my software engineering university class final project. Expect bugs and garbage code. Continue at your own discretion ☠️
+This project was developed for my university software engineering class final assessment. It may contain bugs and poorly written code. Proceed with caution. ☠️
 
 ### Getting Started
 
