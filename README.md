@@ -1,7 +1,7 @@
-### Disclaimer⚠️
+## Disclaimer⚠️
 This project was built for my software engineering university class final project. Expect bugs and garbage code. Continue at your own discretion ☠️
 
-## Getting Started
+### Getting Started
 
 Nomad is an AI assisted trip planner that helps you manage your trips
 
