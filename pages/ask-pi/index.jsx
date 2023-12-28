@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid';
 import { MemoizedReactMarkdown } from '@/components/core/memoized-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import toast from "react-hot-toast";
 
 const AskPi = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +64,9 @@ const AskPi = () => {
       const data = response.body;
       if (!data) {
         return;
+      }
+      if(response.status === 405){
+          return toast.error("Sorry. We've exhausted our OpenAI credits");
       }
 
       const reader = data.getReader();
